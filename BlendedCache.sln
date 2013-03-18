@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlendedCache.Framework", "BlendedCache.Framework\BlendedCache.Framework.csproj", "{2FDF0BE9-0DB1-4456-A000-2F6B7A8EF386}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlendedCache.Providers", "BlendedCache.Providers\BlendedCache.Providers.csproj", "{D0375613-B7DD-4EC4-BC62-36653CAFC4E5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlendedCache.Framework.Tests", "BlendedCache.Framework.Tests\BlendedCache.Framework.Tests.csproj", "{1DB5B00C-3949-4413-AC5F-BCABA035DE52}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2FDF0BE9-0DB1-4456-A000-2F6B7A8EF386}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FDF0BE9-0DB1-4456-A000-2F6B7A8EF386}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FDF0BE9-0DB1-4456-A000-2F6B7A8EF386}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FDF0BE9-0DB1-4456-A000-2F6B7A8EF386}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0375613-B7DD-4EC4-BC62-36653CAFC4E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0375613-B7DD-4EC4-BC62-36653CAFC4E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0375613-B7DD-4EC4-BC62-36653CAFC4E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0375613-B7DD-4EC4-BC62-36653CAFC4E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DB5B00C-3949-4413-AC5F-BCABA035DE52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DB5B00C-3949-4413-AC5F-BCABA035DE52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DB5B00C-3949-4413-AC5F-BCABA035DE52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DB5B00C-3949-4413-AC5F-BCABA035DE52}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
