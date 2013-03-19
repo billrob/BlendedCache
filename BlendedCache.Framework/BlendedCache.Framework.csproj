@@ -40,8 +40,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BlendedCache.cs" />
+    <Compile Include="Configuration\BlendedCacheConfiguration.cs" />
+    <Compile Include="Configuration\BlendedCacheConfigurationException.cs" />
     <Compile Include="CacheHelpers.cs" />
     <Compile Include="CachingLayers\IVolatileCache.cs" />
+    <Compile Include="Configuration\IBlendedCacheConfiguration.cs" />
+    <Compile Include="Configuration\ITypeConfiguration.cs" />
     <Compile Include="IBlendedCache.cs" />
     <Compile Include="ICacheTimeout.cs" />
     <Compile Include="CachingLayers\IContextCache.cs" />
@@ -55,6 +59,7 @@
     <Compile Include="Metrics\Metrics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
