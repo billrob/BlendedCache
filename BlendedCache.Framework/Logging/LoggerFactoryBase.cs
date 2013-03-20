@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace BlendedCache.Logging
 {
 	/// <summary>
-	/// Represents a base logger factory that must be implemented in a custom class.
+	/// Represents a base logger factory that can be implemented in a custom class.
 	/// </summary>
 	public abstract class LoggerFactoryBase : ILoggerFactory
 	{

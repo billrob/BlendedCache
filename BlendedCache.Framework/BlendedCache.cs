@@ -22,7 +22,7 @@ namespace BlendedCache
 			_contextCache = contextCache;
 
 			// create a logger for this class
-			Logging.LoggerHelper.GetLogger(this.GetType());
+			this.Logger = Logging.LoggerHelper.GetLogger(this.GetType());
 		}
 
 		/// <summary>
