@@ -9,7 +9,7 @@ namespace BlendedCache.Logging
 	/// <summary>
 	/// Represents an empty logger that does nothing, usually for unit testing.
 	/// </summary>
-	internal class NullLogger : ILogger
+	internal sealed class NullLogger : ILogger
 	{
 		public void Debug(string message)
 		{

@@ -9,43 +9,37 @@ namespace BlendedCache.Logging.Log4Net
 	/// <summary>
 	/// Represents an instance of BlendedCache.Logging.ILoggerFactory provided by a log4net version.
 	/// </summary>
-	public class Log4NetLoggerFactory : BlendedCache.Logging.ILoggerFactory
+	public class Log4NetLoggerFactory : BlendedCache.Logging.LoggerFactoryBase
 	{
-		static Log4NetLoggerFactory()
+		/// <summary>
+		/// Instantiates an instance of a Log4NetLoggerFactory.
+		/// </summary>
+		/// <param name="config"></param>
+		public Log4NetLoggerFactory(BlendedCache.Logging.LoggerConfigurationSection config)
+			: base(config)
 		{
-			// TODO: logging configuration handling/overrides
 		}
 
-		static log4net.ILog GetLog4NetInstance(String name)
-		{
-			if (String.IsNullOrEmpty(name))
-				throw new ArgumentNullException("name");
+		#region required abstract members
 
-			// we're going to return a new one per call
-			return log4net.LogManager.GetLogger(name);
-		}
-		static log4net.ILog GetLog4NetInstance(Type declaringType)
+		/// <summary>
+		/// Not recommended in log4net as it will return a named logger using this class name, Log4NetLoggerFactory.
+		/// </summary>
+		/// <returns></returns>
+		public override BlendedCache.Logging.ILogger GetLogger()
 		{
-			if (declaringType == null)
-				throw new ArgumentNullException("declaringType");
-
-			// we're going to return a new one per call
-			return log4net.LogManager.GetLogger(declaringType);
+			return this.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.FullName);
 		}
 
-		BlendedCache.Logging.ILogger ILoggerFactory.GetLogger()
-		{
-			var logger = Log4NetLoggerFactory.GetLog4NetInstance(MethodBase.GetCurrentMethod().DeclaringType);
-			return new Log4NetLogger(logger);
-		}
-
-		BlendedCache.Logging.ILogger ILoggerFactory.GetLogger(string loggerName)
+		public override BlendedCache.Logging.ILogger GetLogger(string loggerName)
 		{
 			if (String.IsNullOrEmpty(loggerName))
 				throw new ArgumentOutOfRangeException("loggerName");
 
-			var logger = Log4NetLoggerFactory.GetLog4NetInstance(loggerName);
+			var logger = log4net.LogManager.GetLogger(loggerName);
 			return new Log4NetLogger(logger);
 		}
+
+		#endregion
 	}
 }

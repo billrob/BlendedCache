@@ -9,7 +9,7 @@ namespace BlendedCache.Logging
 	/// <summary>
 	/// Represents an empty factory instance, usually for unit testing.
 	/// </summary>
-	internal class NullLoggerFactory : ILoggerFactory
+	internal sealed class NullLoggerFactory : ILoggerFactory
 	{
 		private static ILogger Logger;
 
@@ -26,6 +26,10 @@ namespace BlendedCache.Logging
 		ILogger ILoggerFactory.GetLogger(string loggerName)
 		{
 			return NullLoggerFactory.Logger;
+		}
+
+		public void SetLoggerLevel(LogLevel logLevel)
+		{
 		}
 	}
 }

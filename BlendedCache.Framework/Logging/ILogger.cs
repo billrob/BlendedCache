@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace BlendedCache.Logging
 {
 	/// <summary>
-	/// Represents an instance of a Logger.
+	/// Represents an instance of an ILogger.
 	/// </summary>
 	public interface ILogger
 	{

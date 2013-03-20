@@ -47,9 +47,10 @@
     <Compile Include="IBlendedCache.cs" />
     <Compile Include="ICacheTimeout.cs" />
     <Compile Include="CachingLayers\IContextCache.cs" />
+    <Compile Include="Logging\LoggerHelper.cs" />
+    <Compile Include="Logging\LoggerFactoryBase.cs" />
     <Compile Include="Logging\ILogger.cs" />
     <Compile Include="Logging\ILoggerFactory.cs" />
-    <Compile Include="Logging\Logger.cs" />
     <Compile Include="Logging\LoggerConfigurationSection.cs" />
     <Compile Include="Logging\LogLevel.cs" />
     <Compile Include="Logging\NullLogger.cs" />

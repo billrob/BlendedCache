@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlendedCache
+namespace BlendedCache.Logging
 {
 	/// <summary>
 	/// Represents a level of logging.

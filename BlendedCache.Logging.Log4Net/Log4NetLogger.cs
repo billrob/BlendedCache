@@ -6,14 +6,14 @@ using System.Text;
 namespace BlendedCache.Logging.Log4Net
 {
 	/// <summary>
-	/// Represents a logger instance of a log4net version of BlendedCache.Logging.ILogger.
+	/// Represents an instance of a log4net version of BlendedCache.Logging.ILogger.
 	/// </summary>
 	public class Log4NetLogger : BlendedCache.Logging.ILogger
 	{
 		private log4net.ILog _logger;
 
 		/// <summary>
-		/// Creates a logger instance of a log4net version of BlendedCache.Logging.ILogger.
+		/// Creates a instance of a log4net version of BlendedCache.Logging.ILogger.
 		/// </summary>
 		/// <param name="logger"></param>
 		public Log4NetLogger(log4net.ILog logger)
@@ -207,7 +207,7 @@ namespace BlendedCache.Logging.Log4Net
 			// in this method we combine it with the format string that is normally used in the logger message by 
 			// appending it to the end.
 			//
-			return String.Format("{0}\n{1}", format, exception.ToString());
+			return String.Format("{0} \n{1}", format, exception.ToString());
 		}
 
 		#endregion

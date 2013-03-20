@@ -15,10 +15,14 @@ namespace BlendedCache
 	{
 		private bool _flushMode;
 		private readonly IContextCache _contextCache;
-
+		private Logging.ILogger Logger;
+		
 		public BlendedCache(IContextCache contextCache)
 		{
 			_contextCache = contextCache;
+
+			// create a logger for this class
+			Logging.LoggerHelper.GetLogger(this.GetType());
 		}
 
 		/// <summary>
