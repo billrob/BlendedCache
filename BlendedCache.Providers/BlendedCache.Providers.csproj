@@ -48,7 +48,6 @@
     <Compile Include="VolatileCacheProviders\NullVolatileCache.cs" />
     <Compile Include="VolatileCacheProviders\RuntimeMemoryCachingVolatileCache.cs" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\BlendedCache.Framework\BlendedCache.Framework.csproj">
       <Project>{2fdf0be9-0db1-4456-a000-2f6b7a8ef386}</Project>
