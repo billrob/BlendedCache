@@ -7,6 +7,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlendedCache.Providers", "B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlendedCache.Framework.Tests", "BlendedCache.Framework.Tests\BlendedCache.Framework.Tests.csproj", "{1DB5B00C-3949-4413-AC5F-BCABA035DE52}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlendedCache.Logging.Log4Net", "BlendedCache.Logging.Log4Net\BlendedCache.Logging.Log4Net.csproj", "{63185575-8894-4313-B06C-A94680EE139B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlendedCache.Logging.NLog", "BlendedCache.Logging.NLog\BlendedCache.Logging.NLog.csproj", "{C213916E-B566-450A-8CCA-91075F49D69A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlendedCache.Logging.Tests", "BlendedCache.Logging.Tests\BlendedCache.Logging.Tests.csproj", "{4E746DDB-4DE2-48D1-9437-BADDFFB210D1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +31,18 @@ Global
 		{1DB5B00C-3949-4413-AC5F-BCABA035DE52}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DB5B00C-3949-4413-AC5F-BCABA035DE52}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DB5B00C-3949-4413-AC5F-BCABA035DE52}.Release|Any CPU.Build.0 = Release|Any CPU
+		{63185575-8894-4313-B06C-A94680EE139B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{63185575-8894-4313-B06C-A94680EE139B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{63185575-8894-4313-B06C-A94680EE139B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{63185575-8894-4313-B06C-A94680EE139B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C213916E-B566-450A-8CCA-91075F49D69A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C213916E-B566-450A-8CCA-91075F49D69A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C213916E-B566-450A-8CCA-91075F49D69A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C213916E-B566-450A-8CCA-91075F49D69A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E746DDB-4DE2-48D1-9437-BADDFFB210D1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E746DDB-4DE2-48D1-9437-BADDFFB210D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E746DDB-4DE2-48D1-9437-BADDFFB210D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E746DDB-4DE2-48D1-9437-BADDFFB210D1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

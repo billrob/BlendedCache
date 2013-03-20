@@ -4,13 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2FDF0BE9-0DB1-4456-A000-2F6B7A8EF386}</ProjectGuid>
+    <ProjectGuid>{4E746DDB-4DE2-48D1-9437-BADDFFB210D1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BlendedCache</RootNamespace>
-    <AssemblyName>BlendedCache.Framework</AssemblyName>
+    <RootNamespace>BlendedCache.Logging.Tests</RootNamespace>
+    <AssemblyName>BlendedCache.Logging.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -20,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,10 +30,10 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -40,28 +42,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BlendedCache.cs" />
-    <Compile Include="CacheHelpers.cs" />
-    <Compile Include="CachingLayers\IVolatileCache.cs" />
-    <Compile Include="BlendedCacheConfigurationSection.cs" />
-    <Compile Include="IBlendedCache.cs" />
-    <Compile Include="ICacheTimeout.cs" />
-    <Compile Include="CachingLayers\IContextCache.cs" />
-    <Compile Include="Logging\ILogger.cs" />
-    <Compile Include="Logging\ILoggerFactory.cs" />
-    <Compile Include="Logging\Logger.cs" />
-    <Compile Include="Logging\LoggerConfigurationSection.cs" />
-    <Compile Include="Logging\LogLevel.cs" />
-    <Compile Include="Logging\NullLogger.cs" />
-    <Compile Include="Logging\NullLoggerFactory.cs" />
-    <Compile Include="Metrics\BlendedCacheMetricsStore.cs" />
-    <Compile Include="Metrics\CacheItemMetrics.cs" />
-    <Compile Include="Metrics\CacheMetricsLookup.cs" />
-    <Compile Include="Metrics\ICacheMetricsContainer.cs" />
-    <Compile Include="Metrics\ICacheMetricsLookup.cs" />
-    <Compile Include="Metrics\IWebRequestCachingUpdater.cs" />
-    <Compile Include="Metrics\Metrics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
