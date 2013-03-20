@@ -15,8 +15,7 @@ namespace BlendedCache.Logging.Log4Net
 		/// Instantiates an instance of a Log4NetLoggerFactory.
 		/// </summary>
 		/// <param name="config"></param>
-		public Log4NetLoggerFactory(BlendedCache.Logging.LoggerConfigurationSection config)
-			: base(config)
+		public Log4NetLoggerFactory()
 		{
 		}
 
