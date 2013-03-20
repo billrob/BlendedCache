@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlendedCache.Configuration
+namespace BlendedCache
 {
 	/// <summary>
 	/// Base class to aid in configuration.  Most configuration operations are supported by creating this object 
 	/// and using the protected methods.  This object can be passed into the BlendedCache constructor for advanced operations.
 	/// </summary>
-	public abstract class BlendedCacheConfiguration<TDataLoader>
+	public class BlendedCacheConfiguration<TDataLoader> : IBlendedCacheConfiguration
 	{
 		IDictionary<Type, ITypeConfiguration> _typeConfigurations = new Dictionary<Type, ITypeConfiguration>();
 		/// <summary>
@@ -45,11 +45,6 @@ namespace BlendedCache.Configuration
 		}
 
 		/// <summary>
-		/// Will require that all types loaded through the Get method need to have a type loader defined.  Default it false.
-		/// </summary>
-		public bool EnforceAllLoadedTypesAreConfigDefined { get; set; }
-
-		/// <summary>
 		/// Will register the TypeConfiguration for the provided type so the blended cache loader can operate on it.
 		/// </summary>
 		/// <param name="type">The type that is being loaded.  The type being returned from cache.</param>
@@ -62,5 +57,20 @@ namespace BlendedCache.Configuration
 				_typeConfigurations[type] = configuration;
 			}
 		}
+
+		/// <summary>
+		/// Determines if a prefix should be applied to all cache keys.
+		/// </summary>
+		public string CacheKeyRoot { get; set; }
+
+		/// <summary>
+		/// Contains the default cache timeout structure when a TypeConfiguration is not defined.
+		/// </summary>
+		public ICacheTimeout DefaultCacheTimeout { get; set; }
+
+		/// <summary>
+		/// Will require that all types loaded through the Get method need to have a type loader defined.  Default it false.
+		/// </summary>
+		public bool EnforceAllLoadedTypesAreConfigDefined { get; set; }
 	}
 }

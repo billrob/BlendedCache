@@ -36,3 +36,4 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: InternalsVisibleTo("BlendedCache.Framework.Tests")]
 [assembly: InternalsVisibleTo("BlendedCache.Providers")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

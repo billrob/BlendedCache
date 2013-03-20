@@ -25,5 +25,10 @@ namespace BlendedCache
 		/// Contains the default cache timeout structure when a TypeConfiguration is not defined.
 		/// </summary>
 		ICacheTimeout DefaultCacheTimeout { get; }
+
+		/// <summary>
+		/// Determines if a prefix should be applied to all cache keys.
+		/// </summary>
+		string CacheKeyRoot { get; }
 	}
 }

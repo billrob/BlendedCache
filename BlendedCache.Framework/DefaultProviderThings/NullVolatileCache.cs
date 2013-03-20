@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlendedCache.Providers
+namespace BlendedCache
 {
 	/// <summary>
 	/// Provides a null volatile cache experience always returning null, and never throwing an exception.
