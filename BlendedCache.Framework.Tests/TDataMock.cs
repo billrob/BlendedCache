@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace BlendedCache.Tests
 {
 	/// <summary>
-	/// Mock interface that is starting out usable everywhere the TDataLoader generic type is used.
+	/// Mock interface that is starting out usable everywhere the TData generic type is used.
 	/// </summary>
-	public class TDataLoaderMock
+	public class TDataMock
 	{
 	}
 }

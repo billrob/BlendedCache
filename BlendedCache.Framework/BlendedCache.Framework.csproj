@@ -41,14 +41,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BlendedCache.cs" />
+    <Compile Include="CachingLayers\ILongTermCacheLookup.cs" />
+    <Compile Include="CachingLayers\ILongTermCache.cs" />
+    <Compile Include="DefaultProviderThings\NullLongTermCache.cs" />
+    <Compile Include="DefaultProviderThings\DefaultLongTermCacheLookup.cs" />
+    <Compile Include="DefaultProviderThings\DefaultVolatileCacheLookup.cs" />
+    <Compile Include="CachingLayers\IVolatileCacheLookup.cs" />
+    <Compile Include="DefaultProviderThings\DefaultContextCacheLookup.cs" />
+    <Compile Include="CachingLayers\IContextCacheLookup.cs" />
     <Compile Include="Configuration\BlendedCacheConfiguration.cs" />
     <Compile Include="Configuration\BlendedCacheConfigurationException.cs" />
-    <Compile Include="CacheHelpers.cs" />
     <Compile Include="CachingLayers\IVolatileCache.cs" />
     <Compile Include="BlendedCacheConfigurationSection.cs" />
     <Compile Include="Configuration\IBlendedCacheConfiguration.cs" />
     <Compile Include="Configuration\ITypeConfiguration.cs" />
+    <Compile Include="DefaultCacheKeyFixupProvider.cs" />
+    <Compile Include="DefaultProviderThings\NullContextCache.cs" />
+    <Compile Include="DefaultProviderThings\NullVolatileCache.cs" />
     <Compile Include="IBlendedCache.cs" />
+    <Compile Include="ICacheKeyFixupProvider.cs" />
     <Compile Include="ICacheTimeout.cs" />
     <Compile Include="CachingLayers\IContextCache.cs" />
     <Compile Include="Logging\LoggerHelper.cs" />
