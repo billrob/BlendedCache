@@ -28,14 +28,15 @@ namespace BlendedCache
 		T Get<T>(string cacheKey) where T : class;
 		
 		/// <summary>
-		/// Will get the list of all items in the context cache.
-		/// </summary>
-		IEnumerable<string> Keys { get; }
-
-		/// <summary>
 		/// Will remove the specified item from the context cache.  No action is taken if the cacheKey does not exist.
 		/// </summary>
 		/// <param name="cacheKey">The cacheKey to be removed.</param>
 		void Remove(string cacheKey);
+
+		/// <summary>
+		/// Will clear all of the items out of the caching container.
+		/// </summary>
+		void Clear();
+
 	}
 }

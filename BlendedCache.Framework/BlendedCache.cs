@@ -48,13 +48,7 @@ namespace BlendedCache
 
 			//reset the context caching when the flush mode is being turned ON.
 			if (!current && flushMode)
-			{
-				//todo:2 should this move to a .Clear() method?
-				foreach (var key in _contextCache.Keys)
-				{
-					_contextCache.Remove(key);
-				}
-			}
+				_contextCache.Clear();
 
 			_flushMode = flushMode;
 

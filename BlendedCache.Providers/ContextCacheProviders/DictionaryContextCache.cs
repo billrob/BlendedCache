@@ -37,9 +37,9 @@ namespace BlendedCache.Providers
 			return _items.TryGetValue(key, out obj) ? (T)obj : default(T);
 		}
 
-		IEnumerable<string> IContextCache.Keys
+		void IContextCache.Clear()
 		{
-			get { return _items.Keys.ToList(); }
+			Dispose();
 		}
 
 		void IContextCache.Remove(string key)

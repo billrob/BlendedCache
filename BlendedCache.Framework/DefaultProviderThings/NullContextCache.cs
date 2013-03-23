@@ -27,19 +27,18 @@ namespace BlendedCache
 		}
 
 		/// <summary>
-		/// Will return an empty collection.
-		/// </summary>
-		IEnumerable<string> IContextCache.Keys
-		{
-			get { return Enumerable.Empty<string>(); }
-		}
-
-		/// <summary>
 		/// Will do nothing.
 		/// </summary>
 		void IContextCache.Remove(string cacheKey)
 		{
 
+		}
+
+		/// <summary>
+		/// Will do nothing.
+		/// </summary>
+		void IContextCache.Clear()
+		{
 		}
 	}
 }

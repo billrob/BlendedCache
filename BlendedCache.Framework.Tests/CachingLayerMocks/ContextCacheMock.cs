@@ -23,9 +23,9 @@ namespace BlendedCache.Tests
 			return null;
 		}
 
-		public virtual IEnumerable<string> Keys
+		public virtual void Clear()
 		{
-			get { return _cache.Keys.ToList().AsEnumerable(); }
+			_cache.Clear();
 		}
 
 		public virtual void Remove(string key)
