@@ -9,7 +9,8 @@ namespace BlendedCache
 	/// <summary>
 	/// The cache metrics lookup object.
 	/// </summary>
-	internal interface ICacheMetricsLookup
+	/// <typeparam name="TDataLoader">The type of data loader such as DataContext.</typeparam>
+	internal interface ICacheMetricsLookup<TDataLoader>
 	{
 		/// <summary>
 		/// Will create a cached item record in the static lock box for recording of metrics of the item.

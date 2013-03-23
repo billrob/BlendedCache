@@ -12,10 +12,12 @@ namespace BlendedCache
 	internal class DefaultLongTermCacheLookup : ILongTermCacheLookup
 	{
 		private readonly ILongTermCache _longTermCache;
+		private readonly IWebRequestCacheMetricsUpdater _metricsUpdater;
 
-		public DefaultLongTermCacheLookup(ILongTermCache longTermCache)
+		public DefaultLongTermCacheLookup(ILongTermCache longTermCache, IWebRequestCacheMetricsUpdater metricsUpdater)
 		{
 			_longTermCache = longTermCache;
+			_metricsUpdater = metricsUpdater;
 		}
 
 		/// <summary>
@@ -24,10 +26,14 @@ namespace BlendedCache
 		/// <typeparam name="TData"></typeparam>
 		/// <param name="fixedUpCacheKey">The cacheKey after it has been run through fix up.</param>
 		/// <returns></returns>
-		public TData GetDataFromLongTermCache<TData>(string fixedUpCacheKey) where TData : class
+		public TData GetDataFromLongTermCache<TData>(string fixedUpCacheKey, CacheItemMetrics cacheMetrics) where TData : class
 		{
-			//return it from http LongTerm.
-			return _longTermCache.Get<TData>(fixedUpCacheKey);
+			//get it from http LongTerm.
+			var item = _longTermCache.Get<TData>(fixedUpCacheKey);
+
+			cacheMetrics.OnItemLongTermCacheLookedUp(item, _metricsUpdater);
+
+			return item;
 		}
 	}
 }
