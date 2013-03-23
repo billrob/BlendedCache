@@ -58,6 +58,7 @@
     <Compile Include="DefaultCacheKeyFixupProvider.cs" />
     <Compile Include="DefaultProviderThings\NullContextCache.cs" />
     <Compile Include="DefaultProviderThings\NullVolatileCache.cs" />
+    <Compile Include="DefaultProviderThings\NullWebRequestCacheMetricsUpdater.cs" />
     <Compile Include="IBlendedCache.cs" />
     <Compile Include="ICacheKeyFixupProvider.cs" />
     <Compile Include="ICacheTimeout.cs" />
@@ -72,7 +73,7 @@
     <Compile Include="Logging\NullLoggerFactory.cs" />
     <Compile Include="Metrics\BlendedCacheMetricsStore.cs" />
     <Compile Include="Metrics\CacheItemMetrics.cs" />
-    <Compile Include="Metrics\CacheMetricsLookup.cs" />
+    <Compile Include="DefaultProviderThings\DefaultCacheMetricsLookup.cs" />
     <Compile Include="Metrics\ICacheMetricsContainer.cs" />
     <Compile Include="Metrics\ICacheMetricsLookup.cs" />
     <Compile Include="Metrics\IWebRequestCachingUpdater.cs" />

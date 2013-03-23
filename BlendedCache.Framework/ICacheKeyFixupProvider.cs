@@ -12,7 +12,7 @@ namespace BlendedCache
 	public interface ICacheKeyFixupProvider
 	{
 		/// <summary>
-		/// Will perform any cleanup operation on the cacheKey before querying all the cache layers.
+		/// Will perform any cleanup operation on the cacheKey before querying all the cache layers.  It's a way to add a namespace to the cache keys.
 		/// </summary>
 		/// <param name="cacheKeyRoot">The cache key root, comes from BlendedCacheConfiguration</param>
 		/// <param name="originalCacheKey">The original cache key from a caller of BlendedCache.</param>

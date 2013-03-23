@@ -11,7 +11,7 @@ namespace BlendedCache
 	/// and multi-key load methods.
 	/// </summary>
 	/// <typeparam name="TDataLoader">Typically a dataContext that is passed to the delegate if provided.</typeparam>
-	public class BlendedCache<TDataLoader> : IBlendedCache<TDataLoader>, ICacheMetricsContainer
+	public class BlendedCache<TDataLoader> : IBlendedCache<TDataLoader>
 	{
 		private bool _flushMode;
 		private readonly IContextCache _contextCache;
@@ -71,29 +71,24 @@ namespace BlendedCache
 		{
 			var fixedUpCacheKey = _cacheKeyFixupProvider.FixUpCacheKey(_cacheKeyRoot, cacheKey);
 
-			TData item = null;
+			TData existingItem = null;
 
-			if (TryGetDataFromContextCache(fixedUpCacheKey, out item))
-				return item;
+			//context cache is the fast one, just return the item.
+			if (TryGetDataFromContextCache(fixedUpCacheKey, out existingItem))
+				return existingItem;
+
+			var cacheMetrics = _cacheMetricsLookup.GetOrCreateCacheItemMetric(fixedUpCacheKey);
 
 			//flushing no need to look further.
 			if (_flushMode) return null;
 
-			//volatile lookup
-			if (_flushMode) return null;
-			item = _volatileCacheLookup.GetDataFromVolatileCache<TData>(fixedUpCacheKey);
+			existingItem = _volatileCacheLookup.GetDataFromVolatileCache<TData>(fixedUpCacheKey, cacheMetrics);
 
 			//longterm lookup
-			if (item == null)
-				item = _longTermCacheLookup.GetDataFromLongTermCache<TData>(fixedUpCacheKey);
-
-			return item;
-		}
-
-		List<Metrics> ICacheMetricsContainer.GetCacheMetrics()
-		{
-			//when changing, check the MetricsStoreTests.
-			return new List<Metrics>();
+			if (existingItem == null)
+				existingItem = _longTermCacheLookup.GetDataFromLongTermCache<TData>(fixedUpCacheKey, cacheMetrics);
+			
+			return existingItem;
 		}
 
 		private ICacheKeyFixupProvider _cacheKeyFixupProvider
@@ -108,14 +103,23 @@ namespace BlendedCache
 
 		private IVolatileCacheLookup _volatileCacheLookup
 		{
-			get { return GetService<IVolatileCacheLookup>() ?? new DefaultVolatileCacheLookup(_volatileCache); }
+			get { return GetService<IVolatileCacheLookup>() ?? new DefaultVolatileCacheLookup(_volatileCache, _metricsUpdater); }
 		}
 
 		private ILongTermCacheLookup _longTermCacheLookup
 		{
-			get { return GetService<ILongTermCacheLookup>() ?? new DefaultLongTermCacheLookup(_longTermCache); }
+			get { return GetService<ILongTermCacheLookup>() ?? new DefaultLongTermCacheLookup(_longTermCache, _metricsUpdater); }
 		}
 
+		private ICacheMetricsLookup<TDataLoader> _cacheMetricsLookup
+		{
+			get { return GetService<ICacheMetricsLookup<TDataLoader>>() ?? new DefaultCacheMetricsLookup<TDataLoader>(); }
+		}
+
+		private IWebRequestCacheMetricsUpdater _metricsUpdater
+		{
+			get { return GetService<IWebRequestCacheMetricsUpdater>() ?? new NullWebRequestCacheMetricsUpdater(); }
+		}
 
 
 
@@ -183,5 +187,34 @@ namespace BlendedCache
 		}
 
 		#endregion ioc work around
+
+		/// <summary>
+		/// Private enum holding instructions of where the data should be set on the cache.
+		/// This is used for populating the high layers of cache during a cache miss.  Will flow
+		/// to other layers, meaning LongTerm will set all locations. ContextCache will not set Volatile
+		/// or LongTerm.
+		/// </summary>
+		public enum SetCacheLocation
+		{
+			/// <summary>
+			/// The item will not be set anywhere.
+			/// </summary>
+			NotSet = 0,
+
+			/// <summary>
+			/// The item only be placed in the context cache.
+			/// </summary>
+			ContextCache = 1,
+
+			/// <summary>
+			/// The item will be placed in context and volatile cache.
+			/// </summary>
+			VolatileCache = 2,
+
+			/// <summary>
+			/// The item will be placed in context, volatile, and long term cache.
+			/// </summary>
+			LongTermCache = 3,
+		}
 	}
 }

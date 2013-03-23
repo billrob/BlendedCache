@@ -7,8 +7,9 @@ using System.Threading;
 namespace BlendedCache
 {
 	/// <summary>
-	/// This class is written to be private and never returned outside the CachedDataStore because of threading concerns.
-	/// If this class is needed for another layer, copy the fields onto another object.
+	/// This class is written to be internal and never returned outside the BlendedCache assembly because 
+	/// of threading concerns.  If this class is needed for another layer, copy the fields onto another object.
+	/// Such as the Metrics object.
 	/// </summary>
 	internal class CacheItemMetrics
 	{

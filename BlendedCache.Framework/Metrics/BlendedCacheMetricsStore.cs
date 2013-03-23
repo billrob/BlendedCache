@@ -59,8 +59,8 @@ namespace BlendedCache
 			if (!_supportedCaches.Contains(type))
 				throw new NotImplementedException("There is not cache metrics for this type: " + type.FullName + ". Perhaps this should return null.");
 
-			var blendedCacheType = typeof(BlendedCache<>).MakeGenericType(type);
-			var cache = FormatterServices.GetUninitializedObject(blendedCacheType) as ICacheMetricsContainer;
+			var metricsLookup = typeof(DefaultCacheMetricsLookup<>).MakeGenericType(type);
+			var cache = FormatterServices.GetUninitializedObject(metricsLookup) as ICacheMetricsContainer;
 
 			if (cache == null)
 				throw new NullReferenceException("Not supported, should be BlendedCache<> and ICacheMetricsContainer.");

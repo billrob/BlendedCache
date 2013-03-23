@@ -12,10 +12,12 @@ namespace BlendedCache
 	internal class DefaultVolatileCacheLookup : IVolatileCacheLookup
 	{
 		private readonly IVolatileCache _volatileCache;
+		private readonly IWebRequestCacheMetricsUpdater _metricsUpdater;
 
-		public DefaultVolatileCacheLookup(IVolatileCache volatileCache)
+		public DefaultVolatileCacheLookup(IVolatileCache volatileCache, IWebRequestCacheMetricsUpdater metricsUpdater)
 		{
 			_volatileCache = volatileCache;
+			_metricsUpdater = metricsUpdater;
 		}
 
 		/// <summary>
@@ -24,10 +26,14 @@ namespace BlendedCache
 		/// <typeparam name="TData"></typeparam>
 		/// <param name="fixedUpCacheKey">The cacheKey after it has been run through fix up.</param>
 		/// <returns></returns>
-		public TData GetDataFromVolatileCache<TData>(string fixedUpCacheKey) where TData : class
+		public TData GetDataFromVolatileCache<TData>(string fixedUpCacheKey, CacheItemMetrics cacheMetrics) where TData : class
 		{
-			//return it from http context.
-			return _volatileCache.Get<TData>(fixedUpCacheKey);
+			//get it from volatile.
+			var item = _volatileCache.Get<TData>(fixedUpCacheKey);
+			
+			cacheMetrics.OnItemVolatileCacheLookedUp(item, _metricsUpdater);
+
+			return item;
 		}
 	}
 }
