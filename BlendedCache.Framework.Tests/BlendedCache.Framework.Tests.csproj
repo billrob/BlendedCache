@@ -47,8 +47,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BlendedCacheSetterTests\SetTests.cs" />
     <Compile Include="BlendedCacheTests\GetTests\Get_NoTypeConfigurationTests.cs" />
     <Compile Include="BlendedCacheTests\SetFlushModeTests.cs" />
+    <Compile Include="BlendedCacheTests\SetTests\SetBasicTests.cs" />
+    <Compile Include="CacheTimeoutMock.cs" />
     <Compile Include="CachingLayerMocks\ContextCacheMock.cs" />
     <Compile Include="ConfigurationTests\BlendedCacheConfigurationBuildTests.cs" />
     <Compile Include="ConfigurationTests\GetCacheTimeoutForTypeOrDefaultTests.cs" />

@@ -20,7 +20,7 @@ namespace BlendedCache
 		private readonly IBlendedCacheConfiguration _configuration;
 		private readonly string _cacheKeyRoot;
 		private readonly Logging.ILogger _logger;
-		
+
 
 		public BlendedCache(IContextCache contextCache, IVolatileCache volatileCache, ILongTermCache longTermCache, IBlendedCacheConfiguration configuration)
 		{
@@ -54,7 +54,7 @@ namespace BlendedCache
 
 			return current;
 		}
-		
+
 		/// <summary>
 		/// Will get the specified item based on the cacheKey.
 		/// </summary>
@@ -81,9 +81,19 @@ namespace BlendedCache
 			//longterm lookup
 			if (existingItem == null)
 				existingItem = _longTermCacheLookup.GetDataFromLongTermCache<TData>(fixedUpCacheKey, cacheMetrics);
-			
+
 			return existingItem;
 		}
+
+
+		#region Set Method
+		public void Set<TData>(string cacheKey, TData cachedItem) where TData : class
+		{
+			var timeout = _configuration.GetCacheTimeoutForTypeOrDefault(typeof(TData));
+
+			_cacheSetter.Set(cacheKey, cachedItem, timeout, SetCacheLocation.LongTermCache, _contextCache, _volatileCache, _longTermCache);
+		}
+		#endregion Set Method
 
 		private ICacheKeyFixupProvider _cacheKeyFixupProvider
 		{
@@ -113,6 +123,11 @@ namespace BlendedCache
 		private IWebRequestCacheMetricsUpdater _metricsUpdater
 		{
 			get { return GetService<IWebRequestCacheMetricsUpdater>() ?? new NullWebRequestCacheMetricsUpdater(); }
+		}
+
+		private IBlendedCacheSetter _cacheSetter
+		{
+			get { return GetService<IBlendedCacheSetter>() ?? new DefaultBlendedCacheSetter(); }
 		}
 
 
@@ -162,11 +177,11 @@ namespace BlendedCache
 		/// </summary>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		internal T GetService<T>() where T:class
+		internal T GetService<T>() where T : class
 		{
 			if (_iocBag.ContainsKey(typeof(T)))
 				return (T)_iocBag[typeof(T)];
-			
+
 			throw new ArgumentNullException("There is no ioc registration or injection for type: " + typeof(T) + " for class: " + this.GetType().Name);
 		}
 
@@ -181,34 +196,5 @@ namespace BlendedCache
 		}
 
 		#endregion ioc work around
-
-		/// <summary>
-		/// Private enum holding instructions of where the data should be set on the cache.
-		/// This is used for populating the high layers of cache during a cache miss.  Will flow
-		/// to other layers, meaning LongTerm will set all locations. ContextCache will not set Volatile
-		/// or LongTerm.
-		/// </summary>
-		public enum SetCacheLocation
-		{
-			/// <summary>
-			/// The item will not be set anywhere.
-			/// </summary>
-			NotSet = 0,
-
-			/// <summary>
-			/// The item only be placed in the context cache.
-			/// </summary>
-			ContextCache = 1,
-
-			/// <summary>
-			/// The item will be placed in context and volatile cache.
-			/// </summary>
-			VolatileCache = 2,
-
-			/// <summary>
-			/// The item will be placed in context, volatile, and long term cache.
-			/// </summary>
-			LongTermCache = 3,
-		}
 	}
 }

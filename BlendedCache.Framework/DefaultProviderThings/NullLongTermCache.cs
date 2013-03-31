@@ -18,5 +18,9 @@ namespace BlendedCache
 		{
 			return null;
 		}
+		void ILongTermCache.Set<TData>(string cacheKey, TData cachedItem, int refreshSeconds, int absoluteExpirationSeconds)
+		{
+			return;
+		}
 	}
 }

@@ -28,6 +28,14 @@ namespace BlendedCache
 		/// <param name="cacheKey">The cacheKey of the item to be retrieved.</param>
 		/// <returns>The item requests or null.  If TypeConfigurations are registered, the TDataLoader will be executed.</returns>
 		TData Get<TData>(string cacheKey) where TData : class;
+
+		/// <summary>
+		/// Will set the cache item using the TypeConfiguration or the default settings.
+		/// </summary>
+		/// <typeparam name="TData">The type of data that should be set.</typeparam>
+		/// <param name="cachedItem">The cacheKey of the item to be stored.</param>
+		/// <param name="data">The data that should be stored under the cacheKey.</param>
+		void Set<TData>(string cacheKey, TData cachedItem) where TData : class;
 	}
 	
 }
