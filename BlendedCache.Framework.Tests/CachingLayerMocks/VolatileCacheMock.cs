@@ -10,20 +10,15 @@ namespace BlendedCache.Tests
 	{
 		private Dictionary<string, object> _cache = new Dictionary<string, object>();
 
-		public virtual void Set<T>(string cacheKey, int cacheDurationSeconds, T data) where T : class
+		public virtual void Set<TData>(string cacheKey, TData cachedItem, int cacheDurationSeconds) where TData : class
 		{
-			_cache[cacheKey] = data;
+			_cache[cacheKey] = cachedItem;
 		}
 
-		public virtual void Set<T>(string cacheKey, T data) where T : class
-		{
-			_cache[cacheKey] = data;
-		}
-
-		public virtual T Get<T>(string cacheKey) where T : class
+		public virtual TData Get<TData>(string cacheKey) where TData : class
 		{
 			if (_cache.ContainsKey(cacheKey))
-				return _cache[cacheKey] as T;
+				return _cache[cacheKey] as TData;
 
 			return null;
 		}

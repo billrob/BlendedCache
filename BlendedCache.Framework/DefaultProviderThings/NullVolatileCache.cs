@@ -14,7 +14,7 @@ namespace BlendedCache
 		/// <summary>
 		/// Will do nothing.
 		/// </summary>
-		void IVolatileCache.Set<T>(string cacheKey, int cacheDurationSeconds, T data)
+		void IVolatileCache.Set<TData>(string cacheKey, TData cachedItem, int cacheDurationSeconds)
 		{
 			throw new NotImplementedException();
 		}
@@ -22,7 +22,7 @@ namespace BlendedCache
 		/// <summary>
 		/// Will always return default(T) which should be null.
 		/// </summary>
-		T IVolatileCache.Get<T>(string cacheKey)
+		TData IVolatileCache.Get<TData>(string cacheKey)
 		{
 			throw new NotImplementedException();
 		}
