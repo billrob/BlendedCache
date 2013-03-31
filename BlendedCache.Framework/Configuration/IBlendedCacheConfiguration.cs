@@ -30,5 +30,13 @@ namespace BlendedCache
 		/// Determines if a prefix should be applied to all cache keys.
 		/// </summary>
 		string CacheKeyRoot { get; }
+
+		/// <summary>
+		/// Will get the cache configuration for the provided type.  Should return the default cacheTimeout when 
+		/// there is no type registered.
+		/// </summary>
+		/// <param name="type">The type to look for the timeouts on.</param>
+		/// <returns>Will return the type specific ICacheTimeout or the DefaultCacheTimeout.</returns>
+		ICacheTimeout GetCacheTimeoutForTypeOrDefault(Type type);
 	}
 }

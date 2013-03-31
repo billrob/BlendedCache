@@ -72,5 +72,24 @@ namespace BlendedCache
 		/// Will require that all types loaded through the Get method need to have a type loader defined.  Default it false.
 		/// </summary>
 		public bool EnforceAllLoadedTypesAreConfigDefined { get; set; }
+
+		/// <summary>
+		/// Will get the cache configuration for the provided type.  Should return the default cacheTimeout when 
+		/// there is no type registered.
+		/// </summary>
+		/// <param name="type">The type to look for the timeouts on.</param>
+		/// <returns>Will return the type specific ICacheTimeout or the DefaultCacheTimeout.</returns>
+		public ICacheTimeout GetCacheTimeoutForTypeOrDefault(Type type)
+		{
+			var config = GetTypeConfiguration(type);
+
+			if (config == null)
+				return DefaultCacheTimeout;
+
+			if (config.CacheTimeout == null)
+				return DefaultCacheTimeout;
+
+			return config.CacheTimeout;
+		}
 	}
 }
