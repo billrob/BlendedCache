@@ -43,6 +43,7 @@
     <Compile Include="BlendedCache.cs" />
     <Compile Include="CachingLayers\ILongTermCacheLookup.cs" />
     <Compile Include="CachingLayers\ILongTermCache.cs" />
+    <Compile Include="DefaultProviderThings\DefaultBlendedCacheSetter.cs" />
     <Compile Include="DefaultProviderThings\NullLongTermCache.cs" />
     <Compile Include="DefaultProviderThings\DefaultLongTermCacheLookup.cs" />
     <Compile Include="DefaultProviderThings\DefaultVolatileCacheLookup.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="DefaultProviderThings\NullVolatileCache.cs" />
     <Compile Include="DefaultProviderThings\NullWebRequestCacheMetricsUpdater.cs" />
     <Compile Include="IBlendedCache.cs" />
+    <Compile Include="IBlendedCacheSetter.cs" />
     <Compile Include="ICacheKeyFixupProvider.cs" />
     <Compile Include="ICacheTimeout.cs" />
     <Compile Include="CachingLayers\IContextCache.cs" />
@@ -79,6 +81,7 @@
     <Compile Include="Metrics\IWebRequestCachingUpdater.cs" />
     <Compile Include="Metrics\Metrics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SetCacheLocation.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
