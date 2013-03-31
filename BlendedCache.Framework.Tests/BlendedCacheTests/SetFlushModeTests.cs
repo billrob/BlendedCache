@@ -33,12 +33,11 @@ namespace BlendedCache.Tests.BlendedCacheTests
 		}
 
 		[Test]
-		public void turn_on_FlushMode_should_only_remove_prefixed_items()
+		public void turn_on_FlushMode_when_initial_FlushMode_is_false_should_call_ContextCache_Clear()
 		{
 			Execute();
 
-			RME.AssertWasCalled(_contextCacheMock, x => x.Remove(_removableCacheKey));
-			RME.AssertWasCalled(_contextCacheMock, x => x.Remove(null), opt => opt.IgnoreArguments().Repeat.Once());
+			RME.AssertWasCalled(_contextCacheMock, x => x.Clear(), opt => opt.Repeat.Once());
 		}
 
 		[Test]
@@ -48,7 +47,7 @@ namespace BlendedCache.Tests.BlendedCacheTests
 
 			Execute();
 
-			RME.AssertWasNotCalled(_contextCacheMock, x => x.Remove(null), opt => opt.IgnoreArguments());
+			RME.AssertWasNotCalled(_contextCacheMock, x => x.Clear());
 		}
 
 		[Test]
@@ -72,12 +71,12 @@ namespace BlendedCache.Tests.BlendedCacheTests
 		}
 
 		[Test]
-		public void turn_off_FlushMode_should_only_remove_prefixed_items()
+		public void turn_off_FlushMode_should_not_call_IContextCache_Clear()
 		{
 			_flushMode = false;
 			Execute();
 
-			RME.AssertWasNotCalled(_contextCacheMock, x => x.Remove(null), opt => opt.IgnoreArguments());
+			RME.AssertWasNotCalled(_contextCacheMock, x => x.Clear());
 		}
 
 		[Test]
@@ -88,7 +87,7 @@ namespace BlendedCache.Tests.BlendedCacheTests
 
 			Execute();
 
-			RME.AssertWasNotCalled(_contextCacheMock, x => x.Remove(null), opt => opt.IgnoreArguments());
+			RME.AssertWasNotCalled(_contextCacheMock, x => x.Clear());
 		}
 
 		[Test]

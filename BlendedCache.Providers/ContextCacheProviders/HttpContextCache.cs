@@ -33,19 +33,6 @@ namespace BlendedCache.Providers
 			return (T)HttpContext.Current.Items[key];
 		}
 
-		IEnumerable<string> IContextCache.Keys
-		{
-			get
-			{
-				if (null == HttpContext.Current)
-					return Enumerable.Empty<string>();
-
-				var matchingKeys = HttpContext.Current.Items.Keys.OfType<string>()
-					.Where(x => x.StartsWith(ContextCacheKeyPrefix));
-				return matchingKeys.Select(x => x.Substring(ContextCacheKeyPrefix.Length));
-			}
-		}
-
 		void IContextCache.Remove(string key)
 		{
 			key = MakeCacheKeyForContextCaching(key);
@@ -54,6 +41,20 @@ namespace BlendedCache.Providers
 			{
 				HttpContext.Current.Items.Remove(key);
 			}
+		}
+
+		void IContextCache.Clear()
+		{
+			if (null == HttpContext.Current)
+				return;
+
+			var matchingKeys = HttpContext.Current.Items.Keys.OfType<string>()
+				.Where(x => x.StartsWith(ContextCacheKeyPrefix));
+			foreach (var cacheKey in matchingKeys.Select(x => x.Substring(ContextCacheKeyPrefix.Length)).ToList())
+			{
+				((IContextCache)this).Remove(cacheKey);
+			}
+
 		}
 
 		private const string ContextCacheKeyPrefix = "x-BC-";
