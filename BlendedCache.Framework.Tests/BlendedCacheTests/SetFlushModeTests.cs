@@ -115,7 +115,7 @@ namespace BlendedCache.Tests.BlendedCacheTests
 		[Test]
 		public void should_have_a_field_named_flush_mode()
 		{
-			var service = new BlendedCache<DataContext>(_contextCacheMock, null, null, null);
+			var service = new BlendedCache(_contextCacheMock, null, null, null);
 			var field = service.GetType().GetField(_flushModePrivateField, BindingFlags.NonPublic | BindingFlags.Instance);
 
 			Assert.NotNull(field, "There is a field required to fully test out the flush mode behavior.");
@@ -123,14 +123,10 @@ namespace BlendedCache.Tests.BlendedCacheTests
 
 		private void Execute()
 		{
-			var service = new BlendedCache<DataContext>(_contextCacheMock, null, null, null);
+			var service = new BlendedCache(_contextCacheMock, null, null, null);
 			service.GetType().GetField(_flushModePrivateField, BindingFlags.NonPublic | BindingFlags.Instance).SetValue(service, _initialFlushMode);
 
 			_response = service.SetFlushMode(_flushMode);
-		}
-
-		private class DataContext
-		{
 		}
 	}
 }

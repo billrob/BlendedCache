@@ -24,13 +24,13 @@ namespace BlendedCache.Logging
 		#region static configuration properties
 		private static readonly ConfigurationProperty PropertyLoggerLevelMinimal =
 			new ConfigurationProperty(PROP_LOGGERLEVELMINIMAL,
-				typeof(BlendedCache.Logging.LogLevel),	// parses the type
-				BlendedCache.Logging.LogLevel.None		// set the default
+				typeof(LogLevel),	// parses the type
+				LogLevel.None		// set the default
 			);
 
 		private static readonly ConfigurationProperty PropertyLoggerFactory =
 			new ConfigurationProperty(PROP_LOGGERFACTORYTYPE,
-				typeof(BlendedCache.Logging.ILoggerFactory)	// parses the type
+				typeof(ILoggerFactory)	// parses the type
 			);
 		#endregion
 
@@ -67,7 +67,7 @@ namespace BlendedCache.Logging
 		{
 			get 
 			{
-				return (BlendedCache.Logging.LogLevel)this[PROP_LOGGERLEVELMINIMAL];
+				return (LogLevel)this[PROP_LOGGERLEVELMINIMAL];
 			}
 			set
 			{

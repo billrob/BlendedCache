@@ -9,12 +9,12 @@ namespace BlendedCache
 	/// <summary>
 	/// The cache metrics lookup object.
 	/// </summary>
-	internal class DefaultCacheMetricsLookup<TDataLoader> : ICacheMetricsLookup<TDataLoader>, ICacheMetricsContainer
+	internal class DefaultCacheMetricsLookup : ICacheMetricsLookup, ICacheMetricsContainer
 	{
 		/// <summary>
-		/// because this is static each TDataLoader this should get it's own dictionary.
+		/// All metrics are stored in this list..
 		/// </summary>
-		private static Dictionary<string, CacheItemMetrics> _lockbox = new Dictionary<string, CacheItemMetrics>();
+		private static Dictionary<string, CacheItemMetrics> _lockbox = new Dictionary<string, CacheItemMetrics>(); //cacheKey, Metrics
 		private static readonly object _lockBoxInsertLock = new object();
 
 		/// <summary>
@@ -22,10 +22,9 @@ namespace BlendedCache
 		/// It could also contain the loader delegate.  If we need to not do a lazy refresh, the loader 
 		/// will need to be stored here.
 		/// </summary>
-		/// <typeparam name="TDataLoader">The type of dataloader the cache key belongs to.</typeparam>
 		/// <param name="cacheKey">The cacheKey of the item being retrieved.</param>
 		/// <returns>Will never return null.</returns>
-		CacheItemMetrics ICacheMetricsLookup<TDataLoader>.GetOrCreateCacheItemMetric(string cacheKey)
+		CacheItemMetrics ICacheMetricsLookup.GetOrCreateCacheItemMetric(string cacheKey)
 		{
 			if (_lockbox.ContainsKey(cacheKey))
 				return _lockbox[cacheKey];

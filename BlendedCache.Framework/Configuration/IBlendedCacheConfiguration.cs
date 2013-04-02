@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 namespace BlendedCache
 {
 	/// <summary>
-	/// Interface representing the configuration information for the defined TDataLoader such 
+	/// Interface representing the configuration information for blended cache such 
 	/// as type loaders and timeouts.  These are the Types that are return from cache, not the types loaded
-	/// inside the TDataLoader methods.
+	/// inside the DataLoader methods.
 	/// </summary>
 	public interface IBlendedCacheConfiguration
 	{

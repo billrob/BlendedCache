@@ -189,16 +189,16 @@ namespace BlendedCache.Tests.BlendedCacheTests.GetTests
 
 		private void Execute()
 		{
-			var cache = new BlendedCache<TDataLoaderMock>(null, null, null, _configurationMock);
+			var cache = new BlendedCache(null, null, null, _configurationMock);
 
 			cache.SetService<IContextCacheLookup>(_contextCacheLookupMock); 
 			cache.SetService<IVolatileCacheLookup>(_volatileCacheLookupMock);
 			cache.SetService<ILongTermCacheLookup>(_longTermCacheLookupMock);
 			cache.SetService<ICacheKeyFixupProvider>(_cacheKeyFixUpProviderMock);
 
-			var cacheItemMetricLookup = RMM.GenerateStrictMock<ICacheMetricsLookup<TDataLoaderMock>>();
+			var cacheItemMetricLookup = RMM.GenerateStrictMock<ICacheMetricsLookup>();
 			RME.Stub(cacheItemMetricLookup, x => x.GetOrCreateCacheItemMetric(_fixedUpCacheKey)).Return(_cacheItemMetrics);
-			cache.SetService<ICacheMetricsLookup<TDataLoaderMock>>(cacheItemMetricLookup);
+			cache.SetService<ICacheMetricsLookup>(cacheItemMetricLookup);
 
 			if(_flushMode.HasValue)
 				cache.SetFlushMode(_flushMode.Value);

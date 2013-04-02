@@ -10,7 +10,7 @@ namespace BlendedCache
 	/// Base class to aid in configuration.  Most configuration operations are supported by creating this object 
 	/// and using the protected methods.  This object can be passed into the BlendedCache constructor for advanced operations.
 	/// </summary>
-	public class BlendedCacheConfiguration<TDataLoader> : IBlendedCacheConfiguration
+	public class BlendedCacheConfiguration : IBlendedCacheConfiguration
 	{
 		IDictionary<Type, ITypeConfiguration> _typeConfigurations = new Dictionary<Type, ITypeConfiguration>();
 		/// <summary>
@@ -38,7 +38,7 @@ namespace BlendedCache
 
 			//if the type definition is required.
 			if (EnforceAllLoadedTypesAreConfigDefined)
-				throw new BlendedCacheConfigurationException("Missing type: " + type.FullName + " defined for TDataLoader: " + typeof(TDataLoader).FullName + ". Please register this type with the RegisterTypeConfiguration method.");
+				throw new BlendedCacheConfigurationException("Missing type: " + type.FullName + " configuration object. Please register this type with the RegisterTypeConfiguration method.");
 
 			//okay to return null
 			return null;

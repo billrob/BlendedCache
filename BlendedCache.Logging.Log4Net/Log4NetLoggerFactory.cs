@@ -9,7 +9,7 @@ namespace BlendedCache.Logging.Log4Net
 	/// <summary>
 	/// Represents an instance of BlendedCache.Logging.ILoggerFactory provided by a log4net version.
 	/// </summary>
-	public class Log4NetLoggerFactory : BlendedCache.Logging.LoggerFactoryBase
+	public class Log4NetLoggerFactory : LoggerFactoryBase
 	{
 		/// <summary>
 		/// Instantiates an instance of a Log4NetLoggerFactory.
@@ -25,12 +25,12 @@ namespace BlendedCache.Logging.Log4Net
 		/// Not recommended in log4net as it will return a named logger using this class name, Log4NetLoggerFactory.
 		/// </summary>
 		/// <returns></returns>
-		public override BlendedCache.Logging.ILogger GetLogger()
+		public override ILogger GetLogger()
 		{
 			return this.GetLogger(MethodBase.GetCurrentMethod().DeclaringType.FullName);
 		}
 
-		public override BlendedCache.Logging.ILogger GetLogger(string loggerName)
+		public override ILogger GetLogger(string loggerName)
 		{
 			if (String.IsNullOrEmpty(loggerName))
 				throw new ArgumentOutOfRangeException("loggerName");

@@ -8,7 +8,7 @@ namespace BlendedCache.Logging.Log4Net
 	/// <summary>
 	/// Represents an instance of a log4net version of BlendedCache.Logging.ILogger.
 	/// </summary>
-	public class Log4NetLogger : BlendedCache.Logging.ILogger
+	public class Log4NetLogger : ILogger
 	{
 		private log4net.ILog _logger;
 

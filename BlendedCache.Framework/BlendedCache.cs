@@ -10,8 +10,7 @@ namespace BlendedCache
 	/// The blended cache container for working with Context, Volatile, and LongTerm cache with fancy single 
 	/// and multi-key load methods.
 	/// </summary>
-	/// <typeparam name="TDataLoader">Typically a dataContext that is passed to the delegate if provided.</typeparam>
-	public class BlendedCache<TDataLoader> : IBlendedCache<TDataLoader>
+	public class BlendedCache : IBlendedCache
 	{
 		private bool _flushMode;
 		private readonly IContextCache _contextCache;
@@ -27,7 +26,7 @@ namespace BlendedCache
 			_contextCache = contextCache ?? new NullContextCache();
 			_volatileCache = volatileCache ?? new NullVolatileCache();
 			_longTermCache = longTermCache ?? new NullLongTermCache();
-			_configuration = configuration ?? new BlendedCacheConfiguration<TDataLoader>();
+			_configuration = configuration ?? new BlendedCacheConfiguration();
 			_cacheKeyRoot = _configuration.CacheKeyRoot; //optimized because it is looked up so many times.
 
 			// create a logger for this class
@@ -60,7 +59,7 @@ namespace BlendedCache
 		/// </summary>
 		/// <typeparam name="TData">The type of data that should be returned.</typeparam>
 		/// <param name="cacheKey">The cacheKey of the item to be retrieved.</param>
-		/// <returns>The item requests or null.  If TypeConfigurations are registered, the TDataLoader will be executed.</returns>
+		/// <returns>The item requests or null.  If TypeConfigurations are registered, the DataLoader will be executed.</returns>
 		public TData Get<TData>(string cacheKey) where TData : class
 		{
 			var fixedUpCacheKey = _cacheKeyFixupProvider.FixUpCacheKey(_cacheKeyRoot, cacheKey);
@@ -115,9 +114,9 @@ namespace BlendedCache
 			get { return GetService<ILongTermCacheLookup>() ?? new DefaultLongTermCacheLookup(_longTermCache, _metricsUpdater); }
 		}
 
-		private ICacheMetricsLookup<TDataLoader> _cacheMetricsLookup
+		private ICacheMetricsLookup _cacheMetricsLookup
 		{
-			get { return GetService<ICacheMetricsLookup<TDataLoader>>() ?? new DefaultCacheMetricsLookup<TDataLoader>(); }
+			get { return GetService<ICacheMetricsLookup>() ?? new DefaultCacheMetricsLookup(); }
 		}
 
 		private IWebRequestCacheMetricsUpdater _metricsUpdater
