@@ -12,7 +12,7 @@ namespace BlendedCache.Tests.ConfigurationTests
 	[TestFixture]
 	public class GetCacheTimeoutForTypeOrDefaultTests
 	{
-		private BlendedCacheConfiguration<TDataLoaderMock> _configuration;
+		private BlendedCacheConfiguration _configuration;
 		private Type _registeredType = null;
 		private ITypeConfiguration _registeredConfig = null;
 		private Type _lookedUpType = null;
@@ -62,7 +62,7 @@ namespace BlendedCache.Tests.ConfigurationTests
 
 		private void Execute()
 		{
-			_configuration = new BlendedCacheConfiguration<TDataLoaderMock>();
+			_configuration = new BlendedCacheConfiguration();
 			_configuration.DefaultCacheTimeout = _defaultCacheTimeout;
 			_configuration.RegisterTypeConfiguration(_registeredType, _registeredConfig);
 

@@ -9,8 +9,7 @@ namespace BlendedCache
 	/// <summary>
 	/// Interface for injecting the BlendedCache container.
 	/// </summary>
-	/// <typeparam name="TDataLoader">The type of the data loader for the cache interaction.</typeparam>
-	public interface IBlendedCache<TDataLoader>
+	public interface IBlendedCache
 	{
 		/// <summary>
 		/// Will turn on/off flush mode for the cache if not already activated.  When turned on initially 
@@ -26,7 +25,7 @@ namespace BlendedCache
 		/// </summary>
 		/// <typeparam name="TData">The type of data that should be returned.</typeparam>
 		/// <param name="cacheKey">The cacheKey of the item to be retrieved.</param>
-		/// <returns>The item requests or null.  If TypeConfigurations are registered, the TDataLoader will be executed.</returns>
+		/// <returns>The item requests or null.  If TypeConfigurations are registered, the DataLoader will be executed.</returns>
 		TData Get<TData>(string cacheKey) where TData : class;
 
 		/// <summary>

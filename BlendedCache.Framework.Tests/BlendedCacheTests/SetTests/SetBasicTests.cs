@@ -12,7 +12,7 @@ namespace BlendedCache.Tests.BlendedCacheTests.SetTests
 	[TestFixture]
 	public class SetBasicTests
 	{
-		private IBlendedCache<TDataLoaderMock> _blendedCache;
+		private IBlendedCache _blendedCache;
 		private TDataMock _cachedItem;
 		private string _cacheKey;
 
@@ -153,7 +153,7 @@ namespace BlendedCache.Tests.BlendedCacheTests.SetTests
 
 		private void Execute()
 		{
-			var cached = new BlendedCache<TDataLoaderMock>(_contextCacheMock, _volatileCacheMock, _longTermCacheMock, _configurationMock);
+			var cached = new BlendedCache(_contextCacheMock, _volatileCacheMock, _longTermCacheMock, _configurationMock);
 			cached.SetService<IBlendedCacheSetter>(_setterMock);
 
 			_blendedCache = cached;

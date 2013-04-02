@@ -103,7 +103,7 @@ namespace BlendedCache.Tests.ConfigurationTests
 			_response = config.GetTypeConfiguration(_typeToLookup);
 		}
 
-		private class Config : BlendedCacheConfiguration<TDataLoaderMock>
+		private class Config : BlendedCacheConfiguration
 		{
 			public Config(bool enforce)
 			{
