@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("BlendedCache.Framework")]
+[assembly: AssemblyTitle("BlendedCache.Framework.IntegrationTests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("BlendedCache.Framework")]
+[assembly: AssemblyProduct("BlendedCache.Framework.IntegrationTests")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("f735adcd-1360-4225-bcd4-6d0200ce64ba")]
+[assembly: Guid("ffec02df-2dd8-45d2-9f99-0932bac6d2a8")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -34,8 +34,3 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
-[assembly: InternalsVisibleTo("BlendedCache.Framework.Tests")]
-[assembly: InternalsVisibleTo("BlendedCache.Providers")]
-[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
-// try to never set internals visible to "BlendedCache.Framework.IntegrationTests" to help enforce the integrative aspects.
-/*****/
