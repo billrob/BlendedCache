@@ -96,37 +96,37 @@ namespace BlendedCache
 
 		private ICacheKeyFixupProvider _cacheKeyFixupProvider
 		{
-			get { return GetService<ICacheKeyFixupProvider>() ?? new DefaultCacheKeyFixupProvider(); }
+			get { return TryGetService<ICacheKeyFixupProvider>() ?? new DefaultCacheKeyFixupProvider(); }
 		}
 
 		private IContextCacheLookup _contextCacheLookup
 		{
-			get { return GetService<IContextCacheLookup>() ?? new DefaultContextCacheLookup(_contextCache); }
+			get { return TryGetService<IContextCacheLookup>() ?? new DefaultContextCacheLookup(_contextCache); }
 		}
 
 		private IVolatileCacheLookup _volatileCacheLookup
 		{
-			get { return GetService<IVolatileCacheLookup>() ?? new DefaultVolatileCacheLookup(_volatileCache, _metricsUpdater); }
+			get { return TryGetService<IVolatileCacheLookup>() ?? new DefaultVolatileCacheLookup(_volatileCache, _metricsUpdater); }
 		}
 
 		private ILongTermCacheLookup _longTermCacheLookup
 		{
-			get { return GetService<ILongTermCacheLookup>() ?? new DefaultLongTermCacheLookup(_longTermCache, _metricsUpdater); }
+			get { return TryGetService<ILongTermCacheLookup>() ?? new DefaultLongTermCacheLookup(_longTermCache, _metricsUpdater); }
 		}
 
 		private ICacheMetricsLookup _cacheMetricsLookup
 		{
-			get { return GetService<ICacheMetricsLookup>() ?? new DefaultCacheMetricsLookup(); }
+			get { return TryGetService<ICacheMetricsLookup>() ?? new DefaultCacheMetricsLookup(); }
 		}
 
 		private IWebRequestCacheMetricsUpdater _metricsUpdater
 		{
-			get { return GetService<IWebRequestCacheMetricsUpdater>() ?? new NullWebRequestCacheMetricsUpdater(); }
+			get { return TryGetService<IWebRequestCacheMetricsUpdater>() ?? new NullWebRequestCacheMetricsUpdater(); }
 		}
 
 		private IBlendedCacheSetter _cacheSetter
 		{
-			get { return GetService<IBlendedCacheSetter>() ?? new DefaultBlendedCacheSetter(); }
+			get { return TryGetService<IBlendedCacheSetter>() ?? new DefaultBlendedCacheSetter(); }
 		}
 
 
@@ -182,6 +182,21 @@ namespace BlendedCache
 				return (T)_iocBag[typeof(T)];
 
 			throw new ArgumentNullException("There is no ioc registration or injection for type: " + typeof(T) + " for class: " + this.GetType().Name);
+		}
+
+		/// <summary>
+		/// Will get a service from the ioc container or the injected IoC bag.  Typically for tests, they will
+		/// be injected with a SetService call.
+		/// Will return null if it doesn't exist.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <returns></returns>
+		internal T TryGetService<T>() where T : class
+		{
+			if (_iocBag.ContainsKey(typeof(T)))
+				return (T)_iocBag[typeof(T)];
+
+			return null;
 		}
 
 		/// <summary>
