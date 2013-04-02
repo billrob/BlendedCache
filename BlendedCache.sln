@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{D1B0AB
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlendedCache.Framework.IntegrationTests", "BlendedCache.Framework.IntegrationTests\BlendedCache.Framework.IntegrationTests.csproj", "{DF276B7C-6460-4FD5-809E-DAA4248FE5D8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +52,10 @@ Global
 		{4E746DDB-4DE2-48D1-9437-BADDFFB210D1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E746DDB-4DE2-48D1-9437-BADDFFB210D1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4E746DDB-4DE2-48D1-9437-BADDFFB210D1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DF276B7C-6460-4FD5-809E-DAA4248FE5D8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DF276B7C-6460-4FD5-809E-DAA4248FE5D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DF276B7C-6460-4FD5-809E-DAA4248FE5D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DF276B7C-6460-4FD5-809E-DAA4248FE5D8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

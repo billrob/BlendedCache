@@ -43,6 +43,7 @@
     <Compile Include="BlendedCache.cs" />
     <Compile Include="CachingLayers\ILongTermCacheLookup.cs" />
     <Compile Include="CachingLayers\ILongTermCache.cs" />
+    <Compile Include="CacheTimeout.cs" />
     <Compile Include="DefaultProviderThings\DefaultBlendedCacheSetter.cs" />
     <Compile Include="DefaultProviderThings\NullLongTermCache.cs" />
     <Compile Include="DefaultProviderThings\DefaultLongTermCacheLookup.cs" />
