@@ -54,5 +54,21 @@ namespace BlendedCache
 
 			return tempList.Select(x => x.GetMetrics()).OrderBy(x => x.TimesLoaded).ToList();
 		}
+
+		/// <summary>
+		/// Will get a specific cachekey metric.  Very performant compared to get all cache metrics.
+		/// </summary>
+		/// <param name="cacheKey">The cacheKey to get the metrics for.</param>
+		/// <returns></returns>
+		Metrics ICacheMetricsContainer.GetCacheMetrics(string cacheKey)
+		{
+			if(String.IsNullOrEmpty(cacheKey))
+				return null;
+
+			if(_lockbox.ContainsKey(cacheKey))
+				return _lockbox[cacheKey].GetMetrics();
+			
+			return null;
+		}
 	}
 }
