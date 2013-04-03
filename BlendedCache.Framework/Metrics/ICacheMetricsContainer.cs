@@ -12,9 +12,16 @@ namespace BlendedCache
 	internal interface ICacheMetricsContainer
 	{
 		/// <summary>
-		/// Will get all the cache metrics stored in the container in no particular order.
+		/// Will get all the cache metrics stored in the container in no particular order.  Not very performant.
 		/// </summary>
 		/// <returns></returns>
 		List<Metrics> GetCacheMetrics();
+
+		/// <summary>
+		/// Will get a specific cachekey metric.  Very performant compared to get all cache metrics.
+		/// </summary>
+		/// <param name="cacheKey">The cacheKey to get the metrics for.</param>
+		/// <returns></returns>
+		Metrics GetCacheMetrics(string cacheKey);
 	}
 }
