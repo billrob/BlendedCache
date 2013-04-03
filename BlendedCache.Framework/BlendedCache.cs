@@ -77,11 +77,31 @@ namespace BlendedCache
 
 			existingItem = _volatileCacheLookup.GetDataFromVolatileCache<TData>(fixedUpCacheKey, cacheMetrics);
 
-			//longterm lookup
-			if (existingItem == null)
-				existingItem = _longTermCacheLookup.GetDataFromLongTermCache<TData>(fixedUpCacheKey, cacheMetrics);
+			//found, so back fill
+			if (existingItem != null)
+			{
+				var timeout = _configuration.GetCacheTimeoutForTypeOrDefault(typeof(TData));
+				_cacheSetter.Set(cacheKey, existingItem, timeout, SetCacheLocation.ContextCache, _contextCache, _volatileCache, _longTermCache);
+				
+				return existingItem;
+			}
 
-			return existingItem;
+			//longterm lookup
+			existingItem = _longTermCacheLookup.GetDataFromLongTermCache<TData>(fixedUpCacheKey, cacheMetrics);
+
+			if (existingItem != null)
+			{
+				var timeout = _configuration.GetCacheTimeoutForTypeOrDefault(typeof(TData));
+				_cacheSetter.Set(cacheKey, existingItem, timeout, SetCacheLocation.VolatileCache, _contextCache, _volatileCache, _longTermCache);
+
+				return existingItem;
+			}
+
+			//i'm thinking this is where the type loader would go.
+			//todo0: add type loader code and finish out flush force load code.
+
+			//found nothing.
+			return null;
 		}
 
 
