@@ -25,5 +25,20 @@ namespace BlendedCache
 
 			return store.GetCacheMetrics();
 		}
+
+		/// <summary>
+		/// Will get the specific cache metrics object via the cache key.  Can return null if there are no metrics.
+		/// </summary>
+		/// <param name="cacheKey">The cache key to get metrics for. </param>
+		/// <returns></returns>
+		public static Metrics GetCacheMetrics(string cacheKey)
+		{
+			var store = new DefaultCacheMetricsLookup() as ICacheMetricsContainer;
+
+			if (store == null)
+				throw new NotImplementedException("There is no cache metrics, maybe this should be returning null or empty list instead.");
+
+			return store.GetCacheMetrics(cacheKey);
+		}
 	}
 }
