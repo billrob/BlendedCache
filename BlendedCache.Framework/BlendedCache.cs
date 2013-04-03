@@ -90,6 +90,7 @@ namespace BlendedCache
 		{
 			var timeout = _configuration.GetCacheTimeoutForTypeOrDefault(typeof(TData));
 
+			//will set across the various layers.
 			_cacheSetter.Set(cacheKey, cachedItem, timeout, SetCacheLocation.LongTermCache, _contextCache, _volatileCache, _longTermCache);
 		}
 		#endregion Set Method

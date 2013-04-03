@@ -60,6 +60,7 @@
     <Compile Include="SimpleGetTests\NotFoundAnyWhereInCacheTests.cs" />
     <Compile Include="SimpleGetTests\FoundInContextCacheTests.cs" />
     <Compile Include="SimpleGetTests\SimpleGetAllVariations_ReturnTypeOnlyTests.cs" />
+    <Compile Include="SimpleSetTests\SetTest_NoTypeConfiguration.cs" />
     <Compile Include="TestHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
