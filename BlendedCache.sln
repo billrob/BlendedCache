@@ -22,6 +22,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{D1B0AB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlendedCache.Framework.IntegrationTests", "BlendedCache.Framework.IntegrationTests\BlendedCache.Framework.IntegrationTests.csproj", "{DF276B7C-6460-4FD5-809E-DAA4248FE5D8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "samples", "samples", "{F04F1B87-EB04-442F-938F-0415DF9BC3CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BasicMvcApplication", "samples\BasicMvcApplication\BasicMvcApplication.csproj", "{44852B49-A2DF-40FC-B77B-FE153CB24487}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,8 +60,15 @@ Global
 		{DF276B7C-6460-4FD5-809E-DAA4248FE5D8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF276B7C-6460-4FD5-809E-DAA4248FE5D8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF276B7C-6460-4FD5-809E-DAA4248FE5D8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{44852B49-A2DF-40FC-B77B-FE153CB24487}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44852B49-A2DF-40FC-B77B-FE153CB24487}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44852B49-A2DF-40FC-B77B-FE153CB24487}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44852B49-A2DF-40FC-B77B-FE153CB24487}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{44852B49-A2DF-40FC-B77B-FE153CB24487} = {F04F1B87-EB04-442F-938F-0415DF9BC3CA}
 	EndGlobalSection
 EndGlobal

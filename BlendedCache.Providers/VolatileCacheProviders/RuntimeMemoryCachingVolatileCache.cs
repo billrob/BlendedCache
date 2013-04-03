@@ -5,7 +5,7 @@ using System.Runtime.Caching;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlendedCache.Providers.VolatileCache
+namespace BlendedCache.Providers
 {
 	/// <summary>
 	/// Wraps the built in system.runtime (MemoryCache.Default) cache which handles both web and non-web applications.

@@ -22,5 +22,20 @@ namespace BlendedCache
 		{
 			return;
 		}
+
+		/// <summary>
+		/// Will return a safely callable, but does nothing ILongTermCache implementation.
+		/// </summary>
+		public static ILongTermCache NullInstance
+		{
+			get
+			{
+				if (_nullInstance == null) // not worried about thread safety here and it will eventually resolve.
+					_nullInstance = new NullLongTermCache();
+
+				return _nullInstance;
+			}
+		}
+		private static ILongTermCache _nullInstance;
 	}
 }
