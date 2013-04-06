@@ -15,6 +15,8 @@ namespace BlendedCache
 		/// Will turn on/off flush mode for the cache if not already activated.  When turned on initially 
 		/// the ContextCache is emptied but will cache further get calls to ensure data consistency through a 
 		/// give code path.  LongTerm and Volatile will always return null when flush mode is activated.  Use sparingly
+		/// 
+		/// Useful for forcing a reload of an item through all cache layers (e.g., after changes to an object are save to the db)
 		/// </summary>
 		/// <param name="flushMode">Whether flush mode should be turned on or off.</param>
 		/// <returns></returns>
