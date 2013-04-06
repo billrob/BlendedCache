@@ -16,7 +16,6 @@ namespace BlendedCache
 		/// </summary>
 		void IVolatileCache.Set<TData>(string cacheKey, TData cachedItem, int cacheDurationSeconds)
 		{
-			throw new NotImplementedException();
 		}
 
 		/// <summary>
@@ -24,7 +23,6 @@ namespace BlendedCache
 		/// </summary>
 		TData IVolatileCache.Get<TData>(string cacheKey)
 		{
-			throw new NotImplementedException();
 		}
 
 		/// <summary>
@@ -32,7 +30,6 @@ namespace BlendedCache
 		/// </summary>
 		void IVolatileCache.Remove(string cacheKey)
 		{
-			throw new NotImplementedException();
 		}
 	}
 }

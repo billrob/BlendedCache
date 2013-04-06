@@ -1,8 +1,7 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BlendedCache.Providers
 {
@@ -13,17 +12,7 @@ namespace BlendedCache.Providers
 	/// </summary>
 	public class DictionaryContextCache : IContextCache, IDisposable
 	{
-		private Dictionary<string, object> __items = new Dictionary<string, object>();
-		private Dictionary<string, object> _items
-		{
-			get
-			{
-				if (__items == null)
-					__items = new Dictionary<string, object>();
-
-				return _items;
-			}
-		}
+		private IDictionary<string, object> _items = new ConcurrentDictionary<string, object>();
 
 		//todo:0 pull over final docs.
 		void IContextCache.Set<T>(string key, T value)
@@ -49,8 +38,8 @@ namespace BlendedCache.Providers
 
 		public void Dispose() //public for ease.
 		{
-			__items.Clear();
-			__items = null;
+			_items.Clear();
+			_items = new ConcurrentDictionary<string, object>();
 		}
 	}
 }
