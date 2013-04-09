@@ -14,7 +14,7 @@ namespace BlendedCache
 		/// <summary>
 		/// Will do nothing.
 		/// </summary>
-		void IVolatileCache.Set<TData>(string cacheKey, TData cachedItem, int cacheDurationSeconds)
+		void IVolatileCache.Set<TData>(string cacheKey, IVolatileCacheEntry<TData> cachedEntry)
 		{
 		}
 
