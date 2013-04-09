@@ -17,12 +17,10 @@ namespace BlendedCache.Providers
 		/// </summary>
 		/// <typeparam name="TData">The type of the object. Normally infered from datatype.</typeparam>
 		/// <param name="cacheKey">The cacheKey for the item.</param>
-		/// <param name="cachedItem">The actual item to be stored in volatile cache.</param>
-		/// <param name="cacheDurationSeconds">The duration in seconds this item should be stored.</param>
-		void IVolatileCache.Set<TData>(string key, TData cachedItem, int cacheDurationSeconds)
+		/// <param name="cacheEntry">The actual item to be stored in volatile cache.</param>
+		void IVolatileCache.Set<TData>(string key, IVolatileCacheEntry<TData> cacheEntry)
 		{
-			var expirationUtc = DateTime.UtcNow.AddSeconds(cacheDurationSeconds);
-			MemoryCache.Default.Set(key, cachedItem, new CacheItemPolicy { AbsoluteExpiration = new DateTimeOffset(expirationUtc) });
+			MemoryCache.Default.Set(key, cacheEntry, new CacheItemPolicy { AbsoluteExpiration = new DateTimeOffset(cacheEntry.ExpirationDateTimeUtc) });
 		}
 
 		/// <summary>

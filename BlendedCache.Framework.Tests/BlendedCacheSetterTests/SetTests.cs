@@ -19,10 +19,13 @@ namespace BlendedCache.Tests.BlendedCacheSetterTests
 		private IContextCache _contextCacheMock;
 		private IVolatileCache _volatileCacheMock;
 		private ILongTermCache _longTermCacheMock;
+		private IVolatileCacheEntry<TDataMock> _passedVolatileCacheEntry;
+		private string _passedVolatileCacheKey;
 
 		[SetUp]
 		public void SetUp()
 		{
+			_passedVolatileCacheEntry = null;
 			_location = SetCacheLocation.NotSet;
 			_cacheKey = "my cacheKey";
 			_cachedItem = new TDataMock();
@@ -37,7 +40,11 @@ namespace BlendedCache.Tests.BlendedCacheSetterTests
 			RME.Stub(_contextCacheMock, x => x.Set<TDataMock>(_cacheKey, _cachedItem));
 
 			_volatileCacheMock = RMM.GenerateStrictMock<IVolatileCache>();
-			RME.Stub(_volatileCacheMock, x => x.Set<TDataMock>(_cacheKey, _cachedItem, _cacheTimeout.VolatileTimeoutInSeconds));
+			RME.Stub(_volatileCacheMock, x => x.Set<TDataMock>(_cacheKey, null)).IgnoreArguments().Do(new Action<string, IVolatileCacheEntry<TDataMock>>((cacheKey, cacheEntry) =>
+				{
+					_passedVolatileCacheEntry = cacheEntry;
+					_passedVolatileCacheKey = cacheKey;
+				}));
 
 			_longTermCacheMock = RMM.GenerateStrictMock<ILongTermCache>();
 			RME.Stub(_longTermCacheMock, x => x.Set<TDataMock>(_cacheKey, _cachedItem, _cacheTimeout.LongTermRefreshInSeconds, _cacheTimeout.LongTermTimeoutInSeconds));
@@ -87,7 +94,29 @@ namespace BlendedCache.Tests.BlendedCacheSetterTests
 
 			Execute();
 
-			RME.AssertWasCalled(_volatileCacheMock, x => x.Set<TDataMock>(_cacheKey, _cachedItem, _cacheTimeout.VolatileTimeoutInSeconds), opt => opt.Repeat.Once());
+			RME.AssertWasCalled(_volatileCacheMock, x => x.Set<TDataMock>(_cacheKey, null), opt => opt.IgnoreArguments().Repeat.Once());
+		}
+
+		[Test]
+		public void when_CacheLocation_is_Volatile_should_set_VolatileCache_with_correct_CacheKey()
+		{
+			_location = SetCacheLocation.VolatileCache;
+
+			Execute();
+
+			Assert.NotNull(_passedVolatileCacheKey);
+			Assert.AreEqual(_cacheKey, _passedVolatileCacheKey);
+		}
+
+		[Test]
+		public void when_CacheLocation_is_Volatile_should_set_VolatileCache_with_correct_CachedEntry()
+		{
+			_location = SetCacheLocation.VolatileCache;
+
+			Execute();
+
+			Assert.NotNull(_passedVolatileCacheEntry);
+			Assert.AreEqual(_cachedItem, _passedVolatileCacheEntry.CachedItem);
 		}
 
 		[Test]
@@ -107,7 +136,29 @@ namespace BlendedCache.Tests.BlendedCacheSetterTests
 
 			Execute();
 
-			RME.AssertWasCalled(_volatileCacheMock, x => x.Set<TDataMock>(_cacheKey, _cachedItem, _cacheTimeout.VolatileTimeoutInSeconds), opt => opt.Repeat.Once());
+			RME.AssertWasCalled(_volatileCacheMock, x => x.Set<TDataMock>(null, null), opt => opt.IgnoreArguments().Repeat.Once());
+		}
+
+		[Test]
+		public void when_CacheLocation_is_LongTerm_should_set_VolatileCache_With_correct_CacheKey()
+		{
+			_location = SetCacheLocation.LongTermCache;
+
+			Execute();
+
+			Assert.NotNull(_passedVolatileCacheKey);
+			Assert.AreEqual(_cacheKey, _passedVolatileCacheKey);
+		}
+
+		[Test]
+		public void when_CacheLocation_is_LongTerm_should_set_VolatileCache_With_correct_CacheEntry()
+		{
+			_location = SetCacheLocation.LongTermCache;
+
+			Execute();
+
+			Assert.NotNull(_passedVolatileCacheEntry);
+			Assert.AreEqual(_cachedItem, _passedVolatileCacheEntry.CachedItem);
 		}
 
 		[Test]
@@ -123,7 +174,7 @@ namespace BlendedCache.Tests.BlendedCacheSetterTests
 
 		private void Execute()
 		{
-			var setter = new DefaultBlendedCacheSetter() as IBlendedCacheSetter;
+			var setter = new DefaultCacheSetter() as ICacheSetter;
 
 			setter.Set(_cacheKey, _cachedItem, _cacheTimeout, _location, _contextCacheMock, _volatileCacheMock, _longTermCacheMock);
 		}
