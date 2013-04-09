@@ -13,6 +13,9 @@ Basic Principles:
 * Provides flush mode support for forcing refreshes at various layers.
 * Allows type load configuration to auto-load items.
 * LongTerm supports Refresh and Absolute expiration time.  Also background refresh support with TypeLoadConfig
+* LongTerm supports Database down Func&lt;bool&gt; parameter to by pass expiration and keep system running.
+* LongTerm ideal permanent distributed cacheStore such as memcached, azure, etc.
+
 
 Sample Context and Volatile for a website.
 
