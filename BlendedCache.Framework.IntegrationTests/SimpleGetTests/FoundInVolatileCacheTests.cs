@@ -15,10 +15,12 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetTests
 		private CachedData _response;
 		private Metrics _previousMetrics;
 		private Metrics _metrics;
+		private IContextCache _contextCache;
 
 		[SetUp]
 		public void SetUp()
 		{
+			_contextCache = null;
 			_response = null;
 			_cachedItem = new CachedData();
 			_previousMetrics = BlendedCacheMetricsStore.GetCacheMetrics().SingleOrDefault(x => _cacheKey.Equals(x.CacheKey, StringComparison.OrdinalIgnoreCase)) ?? new Metrics();
@@ -89,11 +91,22 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetTests
 			Assert.AreEqual(_previousMetrics.VolatileCacheHits + 1, _metrics.VolatileCacheHits);
 		}
 
+		[Test]
+		public void should_set_CachedItem_on_ContextCache()
+		{
+			Execute();
+
+			Assert.NotNull(_cachedItem);
+			Assert.AreEqual(_cachedItem, _contextCache.Get<CachedData>(_cacheKey));
+		}
+
 		private void Execute()
 		{
 			var volatileCache = new DictionaryVolatileCache(_cacheKey, _cachedItem);
 			var cache = TestHelpers.GetCache(volatileCache: volatileCache);
 
+			_contextCache = cache.GetContextCache();
+		
 			_response = cache.Get<CachedData>(_cacheKey);
 
 			_metrics = BlendedCacheMetricsStore.GetCacheMetrics().SingleOrDefault(x => _cacheKey.Equals(x.CacheKey, StringComparison.OrdinalIgnoreCase));

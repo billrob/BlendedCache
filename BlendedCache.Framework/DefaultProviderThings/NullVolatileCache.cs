@@ -23,6 +23,7 @@ namespace BlendedCache
 		/// </summary>
 		TData IVolatileCache.Get<TData>(string cacheKey)
 		{
+			return default(TData);
 		}
 
 		/// <summary>
