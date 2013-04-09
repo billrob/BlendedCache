@@ -16,9 +16,9 @@ namespace BlendedCache
 		/// </summary>
 		/// <typeparam name="TData">The type of the object. Normally infered from datatype.</typeparam>
 		/// <param name="cacheKey">The cacheKey for the item.</param>
-		/// <param name="cachedItem">The actual item to be stored in volatile cache.</param>
+		/// <param name="cachedEntry">The actual item to be stored in volatile cache.</param>
 		/// <param name="cacheDurationSeconds">The duration in seconds this item should be stored.</param>
-		void Set<TData>(string cacheKey, TData cachedItem, int cacheDurationSeconds) where TData : class;
+		void Set<TData>(string cacheKey, IVolatileCacheEntry<TData> cachedEntry) where TData : class;
 
 		/// <summary>
 		/// Will get a strongly typed object from volatile cache.  Will return null if the item does not exist.

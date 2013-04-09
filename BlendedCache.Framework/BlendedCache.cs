@@ -145,9 +145,9 @@ namespace BlendedCache
 			get { return TryGetService<IWebRequestCacheMetricsUpdater>() ?? new NullWebRequestCacheMetricsUpdater(); }
 		}
 
-		private IBlendedCacheSetter _cacheSetter
+		private ICacheSetter _cacheSetter
 		{
-			get { return TryGetService<IBlendedCacheSetter>() ?? new DefaultBlendedCacheSetter(); }
+			get { return TryGetService<ICacheSetter>() ?? new DefaultCacheSetter(); }
 		}
 
 

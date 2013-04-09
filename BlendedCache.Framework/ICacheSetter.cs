@@ -9,7 +9,7 @@ namespace BlendedCache
 	/// <summary>
 	/// Internal interface for actually setting the cached item in the various layers.
 	/// </summary>
-	internal interface IBlendedCacheSetter
+	internal interface ICacheSetter
 	{
 		/// <summary>
 		/// Will set the cached item across all the various layers.
