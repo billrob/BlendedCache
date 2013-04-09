@@ -22,7 +22,7 @@ namespace BlendedCache.Tests.BlendedCacheTests.SetTests
 		private IBlendedCacheConfiguration _configurationMock;
 		private ICacheTimeout _cacheTimeout;
 
-		private IBlendedCacheSetter _setterMock;
+		private ICacheSetter _setterMock;
 
 		private string _passedCacheKey;
 		private TDataMock _passedCachedItem;
@@ -47,7 +47,7 @@ namespace BlendedCache.Tests.BlendedCacheTests.SetTests
 			_configurationMock = RMM.GenerateStub<IBlendedCacheConfiguration>();
 			RME.Stub(_configurationMock, x => x.GetCacheTimeoutForTypeOrDefault(_cachedItem.GetType())).Return(_cacheTimeout);
 
-			_setterMock = RMM.GenerateStrictMock<IBlendedCacheSetter>();
+			_setterMock = RMM.GenerateStrictMock<ICacheSetter>();
 			RME.Stub(_setterMock, x => x.Set<TDataMock>(null, null, null, SetCacheLocation.NotSet, null, null, null)).IgnoreArguments()
 				.Do(new Action<string, TDataMock, ICacheTimeout, SetCacheLocation, IContextCache, IVolatileCache, ILongTermCache>(
 					(passedCacheKey, passedCachedItem, passedTimeout, passedLocation, passedContext, passedVolatile, passedLongTerm) =>
@@ -154,7 +154,7 @@ namespace BlendedCache.Tests.BlendedCacheTests.SetTests
 		private void Execute()
 		{
 			var cached = new BlendedCache(_contextCacheMock, _volatileCacheMock, _longTermCacheMock, _configurationMock);
-			cached.SetService<IBlendedCacheSetter>(_setterMock);
+			cached.SetService<ICacheSetter>(_setterMock);
 
 			_blendedCache = cached;
 			_blendedCache.Set(_cacheKey, _cachedItem);

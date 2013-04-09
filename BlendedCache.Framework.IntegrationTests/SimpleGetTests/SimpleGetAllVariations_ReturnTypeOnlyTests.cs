@@ -14,7 +14,7 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetSetTests
 	[TestFixture]
 	public class SimpleGetAllVariations_ReturnTypeOnlyTests
 	{
-		private const string _cacheKey = "myKey";
+		private string _cacheKey = null;
 		private CachedData _contextCachedItem = null;
 		private CachedData _volatileCachedItem = null;
 		private CachedData _longTermCachedItem = null;
@@ -29,6 +29,7 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetSetTests
 		[SetUp]
 		public void SetUp()
 		{
+			_cacheKey = "myKey";
 			_response = null;
 			_contextCachedItem = new CachedData();
 			_volatileCachedItem = new CachedData();
@@ -68,6 +69,17 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetSetTests
 
 			Assert.NotNull(_response);
 			Assert.AreEqual(_volatileCachedItem, _response);
+		}
+
+		[Test]
+		public void when_expired_in_Volatile_should_return_null()
+		{
+			_cacheKey = _cacheKey + "v1";
+			_volatileCache_Full.Set(_cacheKey, new DefaultVolatileCacheEntry<CachedData>(_volatileCachedItem, 0));
+
+			Execute(volatileCache: _volatileCache_Full);
+
+			Assert.Null(_response);
 		}
 
 		[Test]
