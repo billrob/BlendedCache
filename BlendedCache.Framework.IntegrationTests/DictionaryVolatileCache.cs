@@ -11,7 +11,7 @@ namespace BlendedCache.Framework.IntegrationTests
 	/// </summary>
 	internal class DictionaryVolatileCache : IVolatileCache
 	{
-		private Dictionary<string, CacheWrapper> _collection = new Dictionary<string, CacheWrapper>();
+		private Dictionary<string, DefaultVolatileCacheEntry<object>> _collection = new Dictionary<string, DefaultVolatileCacheEntry<object>>();
 
 		/// <summary>
 		/// Will create an empty dictionary volatile cache.
@@ -25,23 +25,14 @@ namespace BlendedCache.Framework.IntegrationTests
 		/// <param name="cachedItem">The cachedItem to store.</param>
 		public DictionaryVolatileCache(string cacheKey, object cachedItem)
 		{
-			var item = new CacheWrapper()
-			{
-				CachedItem = cachedItem,
-				ExpirationUtc = DateTime.UtcNow.AddSeconds(60),
-			};
+			var item = new DefaultVolatileCacheEntry<object>(cachedItem, 60);
 
 			_collection.Add(cacheKey, item);
 		}
 
-		void IVolatileCache.Set<TData>(string cacheKey, TData cachedItem, int cacheDurationSeconds)
+		void IVolatileCache.Set<TData>(string cacheKey, IVolatileCacheEntry<TData> cacheEntry)
 		{
-			var item = new CacheWrapper()
-			{
-				CachedItem = cachedItem,
-				ExpirationUtc = DateTime.UtcNow.AddSeconds(cacheDurationSeconds),
-			};
-
+			var item = new DefaultVolatileCacheEntry<object>(cacheEntry.CachedItem, cacheEntry.ExpirationDateTimeUtc);
 			lock(_collection)
 				_collection[cacheKey] = item;
 		}
@@ -55,7 +46,7 @@ namespace BlendedCache.Framework.IntegrationTests
 
 				var item = _collection[cacheKey];
 				
-				if (DateTime.UtcNow > item.ExpirationUtc)
+				if (DateTime.UtcNow > item.ExpirationDateTimeUtc)
 				{
 					_collection.Remove(cacheKey);
 					return null;

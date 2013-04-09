@@ -16,7 +16,7 @@ namespace BlendedCache.Tests.BlendedCacheTests.GetTests
 		private string _cacheKey;
 		private ICacheKeyFixupProvider _cacheKeyFixUpProviderMock;
 		private IBlendedCacheConfiguration _configurationMock;
-		private IBlendedCacheSetter _cacheSetterMock;
+		private ICacheSetter _cacheSetterMock;
 		private string _fixedUpCacheKey;
 		private bool? _flushMode;
 
@@ -66,7 +66,7 @@ namespace BlendedCache.Tests.BlendedCacheTests.GetTests
 			_longTermCacheLookupMock = RMM.GenerateStrictMock<ILongTermCacheLookup>();
 			RME.Stub(_longTermCacheLookupMock, x => x.GetDataFromLongTermCache<TDataMock>(_fixedUpCacheKey, _cacheItemMetrics)).Do(new Func<string, CacheItemMetrics, TDataMock>((a, b) => _longTermCachedObject));
 
-			_cacheSetterMock = RMM.GenerateMock<IBlendedCacheSetter>();
+			_cacheSetterMock = RMM.GenerateMock<ICacheSetter>();
 
 			_contextCacheMock = RMM.GenerateMock<IContextCache>();
 			_volatileCacheMock = RMM.GenerateMock<IVolatileCache>();
@@ -254,7 +254,7 @@ namespace BlendedCache.Tests.BlendedCacheTests.GetTests
 			var cacheItemMetricLookup = RMM.GenerateStrictMock<ICacheMetricsLookup>();
 			RME.Stub(cacheItemMetricLookup, x => x.GetOrCreateCacheItemMetric(_fixedUpCacheKey)).Return(_cacheItemMetrics);
 			cache.SetService<ICacheMetricsLookup>(cacheItemMetricLookup);
-			cache.SetService<IBlendedCacheSetter>(_cacheSetterMock);
+			cache.SetService<ICacheSetter>(_cacheSetterMock);
 
 			if(_flushMode.HasValue)
 				cache.SetFlushMode(_flushMode.Value);
