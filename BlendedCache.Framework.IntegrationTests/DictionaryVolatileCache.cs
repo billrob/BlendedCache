@@ -46,7 +46,7 @@ namespace BlendedCache.Framework.IntegrationTests
 
 				var item = _collection[cacheKey];
 				
-				if (DateTime.UtcNow > item.ExpirationDateTimeUtc)
+				if (DateTime.UtcNow >= item.ExpirationDateTimeUtc)
 				{
 					_collection.Remove(cacheKey);
 					return null;
