@@ -17,7 +17,7 @@ namespace BlendedCache.Tests
 
 		public virtual IVolatileCacheEntry<TData> Get<TData>(string cacheKey) where TData : class
 		{
-			//todo:1 should this enforce expiration as the mock?  You would normally mock over that behavior.
+			//NOTE: this should enforce validation because IVolatileCache might not do it.
 			if (_cache.ContainsKey(cacheKey))
 				return _cache[cacheKey] as IVolatileCacheEntry<TData>;
 

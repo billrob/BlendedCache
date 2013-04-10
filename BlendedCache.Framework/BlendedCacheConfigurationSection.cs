@@ -13,7 +13,7 @@ namespace BlendedCache
 	internal class BlendedCacheConfigurationSection : ConfigurationSection
 	{
 		/// <summary>
-		/// TODO: needs comment for EnforceAllLoadedTypesAreConfigDefined
+		/// todo:github https://github.com/billrob/BlendedCache/issues/28
 		/// </summary>
 		[ConfigurationProperty("enforceAllLoadedTypesAreConfigDefined", IsRequired = false)]
 		public Boolean EnforceAllLoadedTypesAreConfigDefined

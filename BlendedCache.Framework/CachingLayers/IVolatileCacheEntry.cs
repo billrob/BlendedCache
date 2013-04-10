@@ -11,7 +11,7 @@ namespace BlendedCache
 	/// The cache item stored by volatile cache.  It is likely the volatile cache store is also contains an expiration, which the provider can look at,
 	/// however blended cache performs this operation to give a more consistent and predictable experience.
 	/// 
-	///  //todo0: enter the process by which people could override this thing.
+	///  todo:github https://github.com/billrob/BlendedCache/issues/25
 	/// </summary>
 	/// <typeparam name="TData">The type of the cached item.</typeparam>
 	public interface IVolatileCacheEntry<TData> where TData : class
