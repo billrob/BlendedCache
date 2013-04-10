@@ -11,12 +11,13 @@ namespace BlendedCache
 		void ICacheSetter.Set<TData>(string cacheKey, TData cachedItem, ICacheTimeout timeout, SetCacheLocation location, IContextCache contextCache, IVolatileCache volatileCache, ILongTermCache longTermCache)
 		{
 			var volatileCacheEntry = (DefaultVolatileCacheEntry<TData>)null;
+			var longTermCacheEntry = (DefaultLongTermCacheEntry<TData>)null;
 
 			//man, I miss fall through switch statements.
 			switch (location)
 			{
 				case SetCacheLocation.LongTermCache:
-					//longTermCache.Set(cacheKey, cachedItem, timeout.LongTermRefreshInSeconds, timeout.LongTermTimeoutInSeconds);
+					longTermCacheEntry = new DefaultLongTermCacheEntry<TData>(cachedItem, timeout.LongTermTimeoutInSeconds, timeout.LongTermRefreshInSeconds);
 					volatileCacheEntry = new DefaultVolatileCacheEntry<TData>(cachedItem, timeout.VolatileTimeoutInSeconds);
 					break;
 				case SetCacheLocation.VolatileCache:
@@ -30,7 +31,7 @@ namespace BlendedCache
 			switch (location)
 			{
 				case SetCacheLocation.LongTermCache:
-					longTermCache.Set(cacheKey, cachedItem, timeout.LongTermRefreshInSeconds, timeout.LongTermTimeoutInSeconds);
+					longTermCache.Set(cacheKey, longTermCacheEntry);
 					volatileCache.Set(cacheKey, volatileCacheEntry);
 					contextCache.Set(cacheKey, cachedItem);
 					break;

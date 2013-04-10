@@ -9,32 +9,33 @@ using NUnit.Framework;
 
 namespace BlendedCache.Tests.BlendedCacheSetterTests
 {
+	//todo: rename to DefaultCacheSetterTest because it doesn't test anything about blednedcache
 	[TestFixture]
 	public class SetTests
 	{
 		private string _cacheKey;
 		private TDataMock _cachedItem;
-		private ICacheTimeout _cacheTimeout;
+		private DefaultCacheTimeout _cacheTimeout;
 		private SetCacheLocation _location;
 		private IContextCache _contextCacheMock;
 		private IVolatileCache _volatileCacheMock;
 		private ILongTermCache _longTermCacheMock;
 		private IVolatileCacheEntry<TDataMock> _passedVolatileCacheEntry;
 		private string _passedVolatileCacheKey;
+		private ILongTermCacheEntry<TDataMock> _passedLongTermCacheEntry;
+		private string _passedLongTermCacheKey;
 
 		[SetUp]
 		public void SetUp()
 		{
 			_passedVolatileCacheEntry = null;
+			_passedVolatileCacheEntry = null;
+			_passedLongTermCacheEntry = null;
+			_passedLongTermCacheEntry = null;
 			_location = SetCacheLocation.NotSet;
 			_cacheKey = "my cacheKey";
 			_cachedItem = new TDataMock();
-			_cacheTimeout = new CacheTimeoutMock()
-			{
-				LongTermRefreshInSeconds = 32834,
-				LongTermTimeoutInSeconds = 124343,
-				VolatileTimeoutInSeconds = 12823,
-			};
+			_cacheTimeout = new DefaultCacheTimeout();
 
 			_contextCacheMock = RMM.GenerateStrictMock<IContextCache>();
 			RME.Stub(_contextCacheMock, x => x.Set<TDataMock>(_cacheKey, _cachedItem));
@@ -47,7 +48,11 @@ namespace BlendedCache.Tests.BlendedCacheSetterTests
 				}));
 
 			_longTermCacheMock = RMM.GenerateStrictMock<ILongTermCache>();
-			RME.Stub(_longTermCacheMock, x => x.Set<TDataMock>(_cacheKey, _cachedItem, _cacheTimeout.LongTermRefreshInSeconds, _cacheTimeout.LongTermTimeoutInSeconds));
+			RME.Stub(_longTermCacheMock, x => x.Set<TDataMock>(_cacheKey, null)).IgnoreArguments().Do(new Action<string, ILongTermCacheEntry<TDataMock>>((cacheKey, cacheEntry) =>
+			{
+				_passedLongTermCacheEntry = cacheEntry;
+				_passedLongTermCacheKey = cacheKey;
+			}));
 		}
 
 		[Test]
@@ -120,6 +125,17 @@ namespace BlendedCache.Tests.BlendedCacheSetterTests
 		}
 
 		[Test]
+		public void when_CacheLocation_is_Volatile_should_set_VolatileCache_with_correct_ExpirationDateTimeUtc()
+		{
+			_location = SetCacheLocation.VolatileCache;
+
+			Execute();
+
+			Assert.NotNull(_passedVolatileCacheEntry);
+			Assert.Less(DateTime.UtcNow, _passedVolatileCacheEntry.ExpirationDateTimeUtc);
+		}
+
+		[Test]
 		public void when_CacheLocation_is_LongTerm_should_set_ContextCache()
 		{
 			_location = SetCacheLocation.LongTermCache;
@@ -162,16 +178,69 @@ namespace BlendedCache.Tests.BlendedCacheSetterTests
 		}
 
 		[Test]
+		public void when_CacheLocation_is_LongTerm_should_set_VolatileCache_with_correct_ExpirationDateTimeUtc()
+		{
+			_location = SetCacheLocation.LongTermCache;
+
+			Execute();
+
+			Assert.NotNull(_passedVolatileCacheEntry);
+			Assert.Less(DateTime.UtcNow, _passedVolatileCacheEntry.ExpirationDateTimeUtc);
+		}
+
+		[Test]
 		public void when_CacheLocation_is_LongTerm_should_set_LongTermCache()
 		{
 			_location = SetCacheLocation.LongTermCache;
 
 			Execute();
 
-			RME.AssertWasCalled(_longTermCacheMock, x => x.Set<TDataMock>(_cacheKey, _cachedItem, _cacheTimeout.LongTermRefreshInSeconds, _cacheTimeout.LongTermTimeoutInSeconds), opt => opt.Repeat.Once());
+			RME.AssertWasCalled(_longTermCacheMock, x => x.Set<TDataMock>(null, null), opt => opt.IgnoreArguments().Repeat.Once());
 		}
 
+		[Test]
+		public void when_CacheLocation_is_LongTerm_should_set_LongTermCache_With_correct_CacheKey()
+		{
+			_location = SetCacheLocation.LongTermCache;
 
+			Execute();
+
+			Assert.NotNull(_passedLongTermCacheKey);
+			Assert.AreEqual(_cacheKey, _passedLongTermCacheKey);
+		}
+
+		[Test]
+		public void when_CacheLocation_is_LongTerm_should_set_LongTermCache_With_correct_CacheEntry()
+		{
+			_location = SetCacheLocation.LongTermCache;
+
+			Execute();
+
+			Assert.NotNull(_passedLongTermCacheEntry);
+			Assert.AreEqual(_cachedItem, _passedLongTermCacheEntry.CachedItem);
+		}
+
+		[Test]
+		public void when_CacheLocation_is_LongTerm_should_set_LongTermCache_with_correct_ExpirationDateTimeUtc()
+		{
+			_location = SetCacheLocation.LongTermCache;
+
+			Execute();
+
+			Assert.NotNull(_passedVolatileCacheEntry);
+			Assert.GreaterOrEqual(DateTime.UtcNow.AddSeconds(_cacheTimeout.LongTermTimeoutInSeconds), _passedVolatileCacheEntry.ExpirationDateTimeUtc);
+		}
+
+		[Test]
+		public void when_CacheLocation_is_LongTerm_should_set_LongTermCache_with_correct_RefreshDateTimeUtc()
+		{
+			_location = SetCacheLocation.LongTermCache;
+			
+			Execute();
+
+			Assert.NotNull(_passedLongTermCacheEntry);
+			Assert.GreaterOrEqual(DateTime.UtcNow.AddSeconds(_cacheTimeout.LongTermRefreshInSeconds), _passedLongTermCacheEntry.RefreshDateTimeUtc);
+		}
 		private void Execute()
 		{
 			var setter = new DefaultCacheSetter() as ICacheSetter;

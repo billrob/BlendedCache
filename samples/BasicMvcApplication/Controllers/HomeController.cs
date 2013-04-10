@@ -42,7 +42,8 @@ namespace BasicMvcApplication.Controllers
 			sb.Append("<p>Metrics of first, second, and third call</p>");
 			sb.Append((new List<Metrics>() { firstMetric, secondMetric, thirdMetric }).ToHtmlString());
 			sb.Append("<p>On app start, should be 0,1,1 for long term, </p>");
-			sb.Append("<p>Volatile should hits and lookups should increase by 1 with an occasional miss.</p>");
+			sb.Append("<p>Volatile should hits and lookups should increase by 1 with 5 second miss.</p>");
+			sb.Append("<p>LongTerm should hits and lookups should increase by 1 with 10 second miss. (once long term is completed)</p>");
 
 
 			return Content(sb.ToString());
@@ -52,7 +53,14 @@ namespace BasicMvcApplication.Controllers
 		{
 			var contextCache = new HttpContextCache();
 			var volatileCache = new RuntimeMemoryCachingVolatileCache();
-			var configuration = new BlendedCacheConfiguration(); // this should be driven by the web.config
+			var configuration = new BlendedCacheConfiguration()
+				{
+					DefaultCacheTimeout = new DefaultCacheTimeout()
+					{
+						VolatileTimeoutInSeconds = 5,
+						LongTermTimeoutInSeconds = 10,
+					}
+				}; // this could be driven by the web.config
 
 			return new BlendedCache.BlendedCache(contextCache, volatileCache, NullLongTermCache.NullInstance, configuration);
 		}

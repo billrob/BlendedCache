@@ -11,7 +11,7 @@ namespace BlendedCache.Framework.IntegrationTests
 	/// </summary>
 	internal class DictionaryLongTermCache : ILongTermCache
 	{
-		private Dictionary<string, CacheWrapper> _collection = new Dictionary<string, CacheWrapper>();
+		private Dictionary<string, DefaultLongTermCacheEntry<object>> _collection = new Dictionary<string, DefaultLongTermCacheEntry<object>>();
 
 				/// <summary>
 		/// Will create an empty dictionary long term cache.
@@ -25,51 +25,42 @@ namespace BlendedCache.Framework.IntegrationTests
 		/// <param name="cachedItem">The cachedItem to store.</param>
 		public DictionaryLongTermCache(string cacheKey, object cachedItem)
 		{
-			var item = new CacheWrapper()
-			{
-				CachedItem = cachedItem,
-				ExpirationUtc = DateTime.UtcNow.AddSeconds(60),
-			};
+			var item = new DefaultLongTermCacheEntry<object>(cachedItem, 60, 60);
 
 			_collection.Add(cacheKey, item);
 		}
 
 
-		TData ILongTermCache.Get<TData>(string cacheKey)
+		ILongTermCacheEntry<TData> ILongTermCache.Get<TData>(string cacheKey)
 		{
 			lock (_collection)
 			{
 				if (!_collection.ContainsKey(cacheKey))
 					return null;
 				
-				var item = _collection[cacheKey];
+				var cacheEntry = _collection[cacheKey];
 				
-				if (DateTime.UtcNow > item.ExpirationUtc)
+				//the higher layers do this already
+				if (DateTime.UtcNow > cacheEntry.ExpirationDateTimeUtc)
 				{
 					_collection.Remove(cacheKey);
 					return null;
 				}
 
-				return item.CachedItem as TData;
+				var cachedItem = cacheEntry.CachedItem as TData;
+				if(cachedItem == null)
+					return null;
+
+				return new DefaultLongTermCacheEntry<TData>(cachedItem, cacheEntry.ExpirationDateTimeUtc, cacheEntry.RefreshDateTimeUtc);
 			}
 		}
 
-		void ILongTermCache.Set<TData>(string cacheKey, TData cachedItem, int refreshSeconds, int absoluteExpirationSeconds)
+		void ILongTermCache.Set<TData>(string cacheKey, ILongTermCacheEntry<TData> cacheEntry)
 		{
-			var item = new CacheWrapper()
-			{
-				CachedItem = cachedItem,
-				ExpirationUtc = DateTime.UtcNow.AddSeconds(absoluteExpirationSeconds),
-			};
+			var item = new DefaultLongTermCacheEntry<object>(cacheEntry.CachedItem, cacheEntry.ExpirationDateTimeUtc, cacheEntry.RefreshDateTimeUtc);
 
 			lock (_collection)
 				_collection[cacheKey] = item;
-		}
-
-		private class CacheWrapper
-		{
-			public object CachedItem { get; set; }
-			public DateTime ExpirationUtc { get; set; }
 		}
 	}
 }

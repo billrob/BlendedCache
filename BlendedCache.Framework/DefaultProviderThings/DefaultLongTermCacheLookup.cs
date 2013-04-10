@@ -33,7 +33,18 @@ namespace BlendedCache
 
 			cacheMetrics.OnItemLongTermCacheLookedUp(item, _metricsUpdater);
 
-			return item;
+			if (item == null)
+				return null;
+			
+			var now = DateTime.UtcNow;
+			if (now >= item.ExpirationDateTimeUtc)
+				//todo: unless database is down.
+				return null;
+
+			if (now >= item.RefreshDateTimeUtc)
+				;//todo: queue off refresh expiration execution
+
+			return item.CachedItem;
 		}
 	}
 }

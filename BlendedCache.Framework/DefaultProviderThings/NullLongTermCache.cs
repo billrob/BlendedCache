@@ -14,11 +14,12 @@ namespace BlendedCache
 		/// <summary>
 		/// Will always return default(T) which should be null.
 		/// </summary>
-		T ILongTermCache.Get<T>(string cacheKey)
+		ILongTermCacheEntry<TData> ILongTermCache.Get<TData>(string cacheKey)
 		{
 			return null;
 		}
-		void ILongTermCache.Set<TData>(string cacheKey, TData cachedItem, int refreshSeconds, int absoluteExpirationSeconds)
+		
+		void ILongTermCache.Set<TData>(string cacheKey, ILongTermCacheEntry<TData> cachedItem)
 		{
 			return;
 		}
