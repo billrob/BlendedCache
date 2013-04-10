@@ -19,7 +19,7 @@ namespace BlendedCache
 		public BlendedCacheConfiguration()
 		{
 			EnforceAllLoadedTypesAreConfigDefined = false;
-			DefaultCacheTimeout = new CacheTimeout();
+			DefaultCacheTimeout = new DefaultCacheTimeout();
 		}
 
 		/// <summary>

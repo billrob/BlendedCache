@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 namespace BlendedCache
 {
 	/// <summary>
-	/// Default class implementing the cache timeout.
+	/// Default class implementing the cache timeout.  Might be out of sync, but 60 sec volatile, 5 minute long term refresh and 1 hour long term absolute.
 	/// </summary>
-	public class CacheTimeout : ICacheTimeout
+	public class DefaultCacheTimeout : ICacheTimeout
 	{
 		/// <summary>
 		/// Will create a default cache timeout block, 60 volatile, 5 minute long term refresh, 1 hour long term absolute
 		/// </summary>
-		public CacheTimeout()
+		public DefaultCacheTimeout()
 		{
 			VolatileTimeoutInSeconds = 60;
 			LongTermRefreshInSeconds = 5 * 60;
