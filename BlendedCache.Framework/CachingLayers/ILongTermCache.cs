@@ -17,8 +17,8 @@ namespace BlendedCache
 		/// </summary>
 		/// <typeparam name="TData">The type of the object. Normally infered from datatype.</typeparam>
 		/// <param name="cacheKey">The cache key of the cached item.</param>
-		/// <returns></returns>
-		TData Get<TData>(string cacheKey) where TData : class;
+		/// <returns>The entry stored in LongTermCache, not checked for any expiration.</returns>
+		ILongTermCacheEntry<TData> Get<TData>(string cacheKey) where TData : class;
 
 		/// <summary>
 		/// Will set the cachedItem under the cacheKey using the specified refresh rules.
@@ -30,6 +30,6 @@ namespace BlendedCache
 		/// considered valid.  Use absoluteExpiration to actually expire.</param>
 		/// <param name="absoluteExpirationSeconds">The duration in seconds until this item is considred expired.  
 		/// Because it is recommended to never expire items from the long term cache, this control that null behavior.</param>
-		void Set<TData>(string cacheKey, TData cachedItem, int refreshSeconds, int absoluteExpirationSeconds);
+		void Set<TData>(string cacheKey, ILongTermCacheEntry<TData> cachedItem) where TData : class;
 	}
 }
