@@ -16,15 +16,16 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleSetTests
 		private IVolatileCache _volatileCache;
 		private ILongTermCache _longTermCache;
 		private IBlendedCacheConfiguration _configuration;
-		
+
 		[SetUp]
 		public void SetUp()
 		{
 			_cachedItem = new CachedData();
+			var existingCachedItem = new CachedData();
 
-			_contextCache = new DictionaryContextCache(_cacheKey, _cachedItem);
-			_volatileCache = new DictionaryVolatileCache(_cacheKey, _cachedItem);
-			_longTermCache = new DictionaryLongTermCache(_cacheKey, _cachedItem);
+			_contextCache = new DictionaryContextCache(_cacheKey, existingCachedItem);
+			_volatileCache = new DictionaryVolatileCache(_cacheKey, existingCachedItem);
+			_longTermCache = new DictionaryLongTermCache(_cacheKey, existingCachedItem);
 
 			_configuration = new BlendedCacheConfiguration();
 		}
@@ -46,7 +47,17 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleSetTests
 
 			Execute();
 
-			Assert.AreEqual(_cachedItem, _volatileCache.Get<CachedData>(_cacheKey));
+			Assert.AreEqual(_cachedItem, _volatileCache.Get<CachedData>(_cacheKey).CachedItem);
+		}
+
+		[Test]
+		public void when_set_should_set_VolatileCache_WithExpiration()
+		{
+			_volatileCache = new DictionaryVolatileCache();
+
+			Execute();
+
+			Assert.AreEqual(_cachedItem, _volatileCache.Get<CachedData>(_cacheKey).CachedItem);
 		}
 
 		[Test]
@@ -72,7 +83,15 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleSetTests
 		{
 			Execute();
 
-			Assert.AreEqual(_cachedItem, _volatileCache.Get<CachedData>(_cacheKey));
+			Assert.AreEqual(_cachedItem, _volatileCache.Get<CachedData>(_cacheKey).CachedItem);
+		}
+
+		[Test]
+		public void when_set_should_replace_VolatileCache_WithExpiration()
+		{
+			Execute();
+
+			Assert.Less(DateTime.UtcNow, _volatileCache.Get<CachedData>(_cacheKey).ExpirationDateTimeUtc);
 		}
 
 		[Test]

@@ -12,13 +12,14 @@ namespace BlendedCache.Tests
 
 		public virtual void Set<TData>(string cacheKey, IVolatileCacheEntry<TData> cacheEntry) where TData : class
 		{
-			_cache[cacheKey] = cacheEntry.CachedItem;
+			_cache[cacheKey] = cacheEntry;
 		}
 
-		public virtual TData Get<TData>(string cacheKey) where TData : class
+		public virtual IVolatileCacheEntry<TData> Get<TData>(string cacheKey) where TData : class
 		{
+			//todo:1 should this enforce expiration as the mock?  You would normally mock over that behavior.
 			if (_cache.ContainsKey(cacheKey))
-				return _cache[cacheKey] as TData;
+				return _cache[cacheKey] as IVolatileCacheEntry<TData>;
 
 			return null;
 		}

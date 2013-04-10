@@ -17,6 +17,7 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetTests
 		private Metrics _metrics;
 		private IContextCache _contextCache;
 		private IVolatileCache _volatileCache;
+		private const int _expirationSeconds = 60;
 
 		[SetUp]
 		public void SetUp()
@@ -109,7 +110,15 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetTests
 			Execute();
 
 			Assert.NotNull(_cachedItem);
-			Assert.AreEqual(_cachedItem, _volatileCache.Get<CachedData>(_cacheKey));
+			Assert.AreEqual(_cachedItem, _volatileCache.Get<CachedData>(_cacheKey).CachedItem);
+		}
+
+		[Test]
+		public void should_set_ExpirationDateTimeUtc_on_VolatileCache()
+		{
+			Execute();
+
+			Assert.Less(DateTime.UtcNow, _volatileCache.Get<CachedData>(_cacheKey).ExpirationDateTimeUtc);
 		}
 
 		private void Execute()
@@ -119,7 +128,7 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetTests
 
 			_contextCache = cache.GetContextCache();
 			_volatileCache = cache.GetVolatileCache();
-		
+
 			_response = cache.Get<CachedData>(_cacheKey);
 
 			_metrics = BlendedCacheMetricsStore.GetCacheMetrics().SingleOrDefault(x => _cacheKey.Equals(x.CacheKey, StringComparison.OrdinalIgnoreCase));

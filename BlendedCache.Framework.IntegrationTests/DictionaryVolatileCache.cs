@@ -37,22 +37,25 @@ namespace BlendedCache.Framework.IntegrationTests
 				_collection[cacheKey] = item;
 		}
 
-		TData IVolatileCache.Get<TData>(string cacheKey)
+		IVolatileCacheEntry<TData> IVolatileCache.Get<TData>(string cacheKey)
 		{
 			lock (_collection)
 			{
 				if (!_collection.ContainsKey(cacheKey))
 					return null;
 
-				var item = _collection[cacheKey];
-				
-				if (DateTime.UtcNow >= item.ExpirationDateTimeUtc)
+				var wrappedCacheItem = _collection[cacheKey];
+
+				if (DateTime.UtcNow >= wrappedCacheItem.ExpirationDateTimeUtc)
 				{
 					_collection.Remove(cacheKey);
 					return null;
 				}
 
-				return item.CachedItem as TData;
+				if (wrappedCacheItem.CachedItem as TData == null)
+					return null;
+
+				return new DefaultVolatileCacheEntry<TData>(wrappedCacheItem.CachedItem as TData, wrappedCacheItem.ExpirationDateTimeUtc);
 			}
 		}
 
