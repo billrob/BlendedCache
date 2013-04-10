@@ -61,13 +61,33 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleSetTests
 		}
 
 		[Test]
-		public void when_set_should_set_LongTermCache()
+		public void when_set_should_set_LongTermCache_CachedItem()
 		{
 			_longTermCache = new DictionaryLongTermCache();
 
 			Execute();
 
-			Assert.AreEqual(_cachedItem, _longTermCache.Get<CachedData>(_cacheKey));
+			Assert.AreEqual(_cachedItem, _longTermCache.Get<CachedData>(_cacheKey).CachedItem);
+		}
+
+		[Test]
+		public void when_set_should_set_LongTermCache_ExpirationDateTimeUtc()
+		{
+			_longTermCache = new DictionaryLongTermCache();
+
+			Execute();
+
+			Assert.Less(DateTime.UtcNow, _longTermCache.Get<CachedData>(_cacheKey).ExpirationDateTimeUtc);
+		}
+
+		[Test]
+		public void when_set_should_set_LongTermCache_RefreshDateTimeUtc()
+		{
+			_longTermCache = new DictionaryLongTermCache();
+
+			Execute();
+
+			Assert.Less(DateTime.UtcNow, _longTermCache.Get<CachedData>(_cacheKey).RefreshDateTimeUtc);
 		}
 
 		[Test]
@@ -99,7 +119,23 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleSetTests
 		{
 			Execute();
 
-			Assert.AreEqual(_cachedItem, _longTermCache.Get<CachedData>(_cacheKey));
+			Assert.AreEqual(_cachedItem, _longTermCache.Get<CachedData>(_cacheKey).CachedItem);
+		}
+
+		[Test]
+		public void when_set_should_replace_LongTermCache_ExpirationDateTimeUtc()
+		{
+			Execute();
+
+			Assert.Less(DateTime.UtcNow, _longTermCache.Get<CachedData>(_cacheKey).ExpirationDateTimeUtc);
+		}
+
+		[Test]
+		public void when_set_should_replace_LongTermCache_RefreshDateTimeUtc()
+		{
+			Execute();
+
+			Assert.Less(DateTime.UtcNow, _longTermCache.Get<CachedData>(_cacheKey).RefreshDateTimeUtc);
 		}
 
 		private void Execute()
