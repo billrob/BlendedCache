@@ -21,9 +21,9 @@ namespace BlendedCache
 		/// <summary>
 		/// Will always return default(T) which should be null.
 		/// </summary>
-		TData IVolatileCache.Get<TData>(string cacheKey)
+		IVolatileCacheEntry<TData> IVolatileCache.Get<TData>(string cacheKey)
 		{
-			return default(TData);
+			return null;  //as this means the item doesn't exist.
 		}
 
 		/// <summary>

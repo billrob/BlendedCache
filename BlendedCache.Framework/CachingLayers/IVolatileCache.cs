@@ -25,8 +25,8 @@ namespace BlendedCache
 		/// </summary>
 		/// <typeparam name="TData">The type of object to retreive.</typeparam>
 		/// <param name="cacheKey">The cache key of the cached item.</param>
-		/// <returns>Will return the item from cache or null if it doesn't exist.</returns>
-		TData Get<TData>(string cacheKey) where TData : class;
+		/// <returns>Will return the IVolatileCache item from cache or null if it doesn't exist.  The underlying store might have its own expiration policy.</returns>
+		IVolatileCacheEntry<TData> Get<TData>(string cacheKey) where TData : class;
 
 		/// <summary>
 		/// Will remove the specified item from the context cache.  No action is taken if the cacheKey does not exist.

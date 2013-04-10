@@ -29,9 +29,9 @@ namespace BlendedCache.Providers
 		/// <typeparam name="TData">The type of object to retreive.</typeparam>
 		/// <param name="cacheKey">The cache key of the cached item.</param>
 		/// <returns>Will return the item from cache or null if it doesn't exist.</returns>
-		TData IVolatileCache.Get<TData>(string cacheKey)
+		IVolatileCacheEntry<TData> IVolatileCache.Get<TData>(string cacheKey)
 		{
-			return MemoryCache.Default.Get(cacheKey) as TData;
+			return MemoryCache.Default.Get(cacheKey) as IVolatileCacheEntry<TData>;
 		}
 
 		/// <summary>

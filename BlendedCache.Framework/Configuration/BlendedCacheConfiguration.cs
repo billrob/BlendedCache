@@ -14,7 +14,7 @@ namespace BlendedCache
 	{
 		IDictionary<Type, ITypeConfiguration> _typeConfigurations = new Dictionary<Type, ITypeConfiguration>();
 		/// <summary>
-		/// Creates a default BlendedCacheConfiguration object.
+		/// Creates a default BlendedCacheConfiguration object.  Also creates a DefaultCacheTimeout with its defaults.
 		/// </summary>
 		public BlendedCacheConfiguration()
 		{

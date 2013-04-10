@@ -30,10 +30,19 @@ namespace BlendedCache
 		{
 			//get it from volatile.
 			var item = _volatileCache.Get<TData>(fixedUpCacheKey);
-			
+
 			cacheMetrics.OnItemVolatileCacheLookedUp(item, _metricsUpdater);
 
-			return item;
+			//bail out if null
+			if (item == null)
+				return null;
+
+			//this is where blended cache enforces its on definition
+			var now = DateTime.UtcNow;
+			if (now >= item.ExpirationDateTimeUtc)
+				return null;
+
+			return item.CachedItem;
 		}
 	}
 }
