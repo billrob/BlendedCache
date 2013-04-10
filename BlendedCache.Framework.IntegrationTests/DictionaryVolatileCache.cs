@@ -46,13 +46,15 @@ namespace BlendedCache.Framework.IntegrationTests
 
 				var wrappedCacheItem = _collection[cacheKey];
 
+				//the lookup should also do this.
 				if (DateTime.UtcNow >= wrappedCacheItem.ExpirationDateTimeUtc)
 				{
 					_collection.Remove(cacheKey);
 					return null;
 				}
 
-				if (wrappedCacheItem.CachedItem as TData == null)
+				var cachedItem = wrappedCacheItem.CachedItem as TData;
+				if (cachedItem == null)
 					return null;
 
 				return new DefaultVolatileCacheEntry<TData>(wrappedCacheItem.CachedItem as TData, wrappedCacheItem.ExpirationDateTimeUtc);
@@ -66,12 +68,6 @@ namespace BlendedCache.Framework.IntegrationTests
 				if (_collection.ContainsKey(cacheKey))
 					_collection.Remove(cacheKey);
 			}
-		}
-
-		private class CacheWrapper
-		{
-			public object CachedItem { get; set; }
-			public DateTime ExpirationUtc { get; set; }
 		}
 	}
 }

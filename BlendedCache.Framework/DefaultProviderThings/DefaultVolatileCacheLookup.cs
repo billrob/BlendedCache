@@ -37,7 +37,7 @@ namespace BlendedCache
 			if (item == null)
 				return null;
 
-			//this is where blended cache enforces its on definition
+			//this is where blended cache enforces its own definition
 			var now = DateTime.UtcNow;
 			if (now >= item.ExpirationDateTimeUtc)
 				return null;

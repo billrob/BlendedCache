@@ -24,7 +24,7 @@ namespace BlendedCache
 
 		/// <summary>
 		/// Amount of time in seconds before blended cache should force a refresh of this cache item and serve out
-		/// potentially stale data during that time.
+		/// potentially stale data during that time.  Use LongTermTimeoutInSeconds to control when a blocked load will occur.
 		/// </summary>
 		int LongTermRefreshInSeconds { get; }
 	}
