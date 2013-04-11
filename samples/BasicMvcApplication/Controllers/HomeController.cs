@@ -11,18 +11,21 @@ namespace BasicMvcApplication.Controllers
 {
 	public class HomeController : Controller
 	{
-		public ActionResult Index()
+		public ActionResult Diag(int? id)
 		{
-			var cacheKey = "HomeController.Index.SampleData";
+			id = id ?? 42;
+			var cacheKey = "HomeController.Index.SampleData." + id;
 			var cache = GetCache();
 			var sb = new StringBuilder();
 
 			var firstMetric = BlendedCacheMetricsStore.GetCacheMetrics(cacheKey) ?? new Metrics();
 
+			var data = (SampleData)null;
 			if (cache.Get<SampleData>(cacheKey) == null)
 			{
 				sb.Append("<p>data did not exist</p>");
-				cache.Set(cacheKey, new SampleData("Sylvester Martin"));
+				data = DataBase.GetSampleData(id.Value);
+				cache.Set(cacheKey, data);
 			}
 			else
 			{
@@ -31,7 +34,7 @@ namespace BasicMvcApplication.Controllers
 
 			var secondMetric = BlendedCacheMetricsStore.GetCacheMetrics(cacheKey);
 
-			var data = cache.Get<SampleData>(cacheKey);
+			data = cache.Get<SampleData>(cacheKey);
 			sb.Append("<p>Date Created: " + data.DateCreated.ToString() + "</p>");
 
 			cache.Get<SampleData>(cacheKey);
@@ -45,8 +48,26 @@ namespace BasicMvcApplication.Controllers
 			sb.Append("<p>Volatile should hits and lookups should increase by 1 with 5 second miss.</p>");
 			sb.Append("<p>LongTerm should hits and lookups should increase by 1 with 10 second miss. (once long term is completed)</p>");
 
-
 			return Content(sb.ToString());
+		}
+
+		public ActionResult Index(int? id)
+		{
+			id = id ?? 42;
+
+			var cache = GetCache();
+			var cacheKey = "SampleData." + id;
+
+			var data = cache.Get<SampleData>(cacheKey);
+
+			if(data == null)
+			{
+				ViewData["CacheMiss"] = new object();
+				data = DataBase.GetSampleData(id.Value);
+				cache.Set(cacheKey, data);
+			}
+
+			return View(data);
 		}
 
 		private static IBlendedCache GetCache()
@@ -64,19 +85,6 @@ namespace BasicMvcApplication.Controllers
 
 			return new BlendedCache.BlendedCache(contextCache, volatileCache, NullLongTermCache.NullInstance, configuration);
 		}
-
-		private class SampleData
-		{
-			public SampleData(string name)
-			{
-				Name = name;
-				DateCreated = DateTime.UtcNow;
-
-			}
-			public string Name { get; private set; }
-			public DateTime DateCreated { get; private set; }
-		}
-
 	}
 
 	internal static class HomeControllerExtensions
