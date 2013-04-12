@@ -14,6 +14,7 @@ namespace BlendedCache.Tests.BlendedCacheTests.SetTests
 	{
 		private IBlendedCache _blendedCache;
 		private TDataMock _cachedItem;
+		private const int _lookupKey = 103458;
 		private string _cacheKey;
 
 		private IContextCache _contextCacheMock;
@@ -36,7 +37,7 @@ namespace BlendedCache.Tests.BlendedCacheTests.SetTests
 		public void SetUp()
 		{
 			_cachedItem = new TDataMock();
-			_cacheKey = "my cache key";
+			_cacheKey = new DefaultCacheKeyConverter().ConvertCacheKey<TDataMock, int>("", _lookupKey);
 
 			_cacheTimeout = RMM.GenerateStrictMock<ICacheTimeout>();
 
@@ -157,7 +158,7 @@ namespace BlendedCache.Tests.BlendedCacheTests.SetTests
 			cached.SetService<ICacheSetter>(_setterMock);
 
 			_blendedCache = cached;
-			_blendedCache.Set(_cacheKey, _cachedItem);
+			_blendedCache.Set(_lookupKey, _cachedItem);
 		}
 	}
 }

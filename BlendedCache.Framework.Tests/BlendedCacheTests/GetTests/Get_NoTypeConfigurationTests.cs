@@ -13,8 +13,8 @@ namespace BlendedCache.Tests.BlendedCacheTests.GetTests
 	public class Get_NoTypeConfigurationTests
 	{
 		private TDataMock _response;
-		private string _cacheKey;
-		private ICacheKeyFixupProvider _cacheKeyFixUpProviderMock;
+		private string _lookupKey;
+		private ICacheKeyConverter _cacheKeyConverterMock;
 		private IBlendedCacheConfiguration _configurationMock;
 		private ICacheSetter _cacheSetterMock;
 		private string _fixedUpCacheKey;
@@ -41,8 +41,8 @@ namespace BlendedCache.Tests.BlendedCacheTests.GetTests
 		public void SetUp()
 		{
 			_response = null;
-			_cacheKey = "my cache key";
-			_fixedUpCacheKey = "FixedUp " + _cacheKey;
+			_lookupKey = "my lookupKey";
+			_fixedUpCacheKey = "cache key for: " + _lookupKey;
 			_flushMode = null;
 
 			_cacheTimeout = RMM.GenerateMock<ICacheTimeout>();
@@ -51,8 +51,8 @@ namespace BlendedCache.Tests.BlendedCacheTests.GetTests
 
 			_cacheItemMetrics = new CacheItemMetrics(_fixedUpCacheKey);
 
-			_cacheKeyFixUpProviderMock = RMM.GenerateStrictMock<ICacheKeyFixupProvider>();
-			RME.Stub(_cacheKeyFixUpProviderMock, x => x.FixUpCacheKey(null, _cacheKey)).Do(new Func<string, string, string>((a, b) => _fixedUpCacheKey));
+			_cacheKeyConverterMock = RMM.GenerateStrictMock<ICacheKeyConverter>();
+			RME.Stub(_cacheKeyConverterMock, x => x.ConvertCacheKey<TDataMock, string>(null, _lookupKey)).Do(new Func<string, string, string>((a, b) => _fixedUpCacheKey));
 
 			_contextCachedObject = null;
 			_contextCacheLookupMock = RMM.GenerateStrictMock<IContextCacheLookup>();
@@ -78,7 +78,7 @@ namespace BlendedCache.Tests.BlendedCacheTests.GetTests
 		{
 			Execute();
 
-			RME.AssertWasCalled(_cacheKeyFixUpProviderMock, x => x.FixUpCacheKey(null, _cacheKey), opt => opt.Repeat.Once());
+			RME.AssertWasCalled(_cacheKeyConverterMock, x => x.ConvertCacheKey<TDataMock, string>(null, _lookupKey), opt => opt.Repeat.Once());
 		}
 
 		[Test]
@@ -87,11 +87,11 @@ namespace BlendedCache.Tests.BlendedCacheTests.GetTests
 			var cacheKeyRoot = "root";
 			_configurationMock = RMM.GenerateStrictMock<IBlendedCacheConfiguration>();
 			RME.Stub(_configurationMock, x => x.CacheKeyRoot).Return(cacheKeyRoot);
-			RME.Stub(_cacheKeyFixUpProviderMock, x => x.FixUpCacheKey(cacheKeyRoot, _cacheKey)).Return(_fixedUpCacheKey);
+			RME.Stub(_cacheKeyConverterMock, x => x.ConvertCacheKey<TDataMock, string>(cacheKeyRoot, _lookupKey)).Return(_fixedUpCacheKey);
 
 			Execute();
 
-			RME.AssertWasCalled(_cacheKeyFixUpProviderMock, x => x.FixUpCacheKey(cacheKeyRoot, _cacheKey), opt => opt.Repeat.Once());
+			RME.AssertWasCalled(_cacheKeyConverterMock, x => x.ConvertCacheKey<TDataMock, string>(cacheKeyRoot, _lookupKey), opt => opt.Repeat.Once());
 		}
 
 		[Test]
@@ -181,7 +181,7 @@ namespace BlendedCache.Tests.BlendedCacheTests.GetTests
 
 			Execute();
 
-			RME.AssertWasCalled(_cacheSetterMock, x => x.Set<TDataMock>(_cacheKey, _volatileCachedObject, _cacheTimeout, SetCacheLocation.ContextCache, _contextCacheMock, _volatileCacheMock, _longTermCacheMock));
+			RME.AssertWasCalled(_cacheSetterMock, x => x.Set<TDataMock>(_fixedUpCacheKey, _volatileCachedObject, _cacheTimeout, SetCacheLocation.ContextCache, _contextCacheMock, _volatileCacheMock, _longTermCacheMock));
 		}
 
 		[Test]
@@ -229,7 +229,7 @@ namespace BlendedCache.Tests.BlendedCacheTests.GetTests
 
 			Execute();
 
-			RME.AssertWasCalled(_cacheSetterMock, x => x.Set<TDataMock>(_cacheKey, _longTermCachedObject, _cacheTimeout, SetCacheLocation.VolatileCache, _contextCacheMock, _volatileCacheMock, _longTermCacheMock));
+			RME.AssertWasCalled(_cacheSetterMock, x => x.Set<TDataMock>(_fixedUpCacheKey, _longTermCachedObject, _cacheTimeout, SetCacheLocation.VolatileCache, _contextCacheMock, _volatileCacheMock, _longTermCacheMock));
 		}
 
 		[Test]
@@ -249,7 +249,7 @@ namespace BlendedCache.Tests.BlendedCacheTests.GetTests
 			cache.SetService<IContextCacheLookup>(_contextCacheLookupMock); 
 			cache.SetService<IVolatileCacheLookup>(_volatileCacheLookupMock);
 			cache.SetService<ILongTermCacheLookup>(_longTermCacheLookupMock);
-			cache.SetService<ICacheKeyFixupProvider>(_cacheKeyFixUpProviderMock);
+			cache.SetService<ICacheKeyConverter>(_cacheKeyConverterMock);
 
 			var cacheItemMetricLookup = RMM.GenerateStrictMock<ICacheMetricsLookup>();
 			RME.Stub(cacheItemMetricLookup, x => x.GetOrCreateCacheItemMetric(_fixedUpCacheKey)).Return(_cacheItemMetrics);
@@ -259,7 +259,7 @@ namespace BlendedCache.Tests.BlendedCacheTests.GetTests
 			if(_flushMode.HasValue)
 				cache.SetFlushMode(_flushMode.Value);
 
-			_response = cache.Get<TDataMock>(_cacheKey);
+			_response = cache.Get<TDataMock>(_lookupKey);
 		}
 	}
 }

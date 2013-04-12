@@ -14,6 +14,7 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetSetTests
 	[TestFixture]
 	public class SimpleGetAllVariations_ReturnTypeOnlyTests
 	{
+		private const string _lookupKey = "PublisherId:323";
 		private string _cacheKey = null;
 		private CachedData _contextCachedItem = null;
 		private CachedData _volatileCachedItem = null;
@@ -29,7 +30,7 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetSetTests
 		[SetUp]
 		public void SetUp()
 		{
-			_cacheKey = "myKey";
+			_cacheKey = new DefaultCacheKeyConverter().ConvertCacheKey<CachedData, string>("", _lookupKey);
 			_response = null;
 			_contextCachedItem = new CachedData();
 			_volatileCachedItem = new CachedData();
@@ -74,7 +75,7 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetSetTests
 		[Test]
 		public void when_expired_in_Volatile_should_return_null()
 		{
-			_cacheKey = _cacheKey + "v1";
+			//_cacheKey = _cacheKey + "v1";
 			_volatileCache_Full.Set(_cacheKey, new DefaultVolatileCacheEntry<CachedData>(_volatileCachedItem, 0));
 
 			Execute(volatileCache: _volatileCache_Full);
@@ -131,7 +132,7 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetSetTests
 		{
 			var cache = TestHelpers.GetCache(contextCache, volatileCache, longTermCache, initialFlushMode: false);
 
-			_response = cache.Get<CachedData>(_cacheKey);
+			_response = cache.Get<CachedData>(_lookupKey);
 		}
 		
 	}

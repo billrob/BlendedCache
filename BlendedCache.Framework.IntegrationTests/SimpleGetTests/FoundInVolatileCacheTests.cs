@@ -10,7 +10,8 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetTests
 	[TestFixture]
 	public class FoundInVolatileCacheTests
 	{
-		private const string _cacheKey = "myKey";
+		public const string _lookupKey = "userKey";
+		private string _cacheKey;
 		private CachedData _cachedItem;
 		private CachedData _response;
 		private Metrics _previousMetrics;
@@ -20,6 +21,7 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetTests
 		[SetUp]
 		public void SetUp()
 		{
+			_cacheKey = new DefaultCacheKeyConverter().ConvertCacheKey<CachedData, string>("", _lookupKey);
 			_contextCache = null;
 			_response = null;
 			_cachedItem = new CachedData();
@@ -107,7 +109,7 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetTests
 
 			_contextCache = cache.GetContextCache();
 		
-			_response = cache.Get<CachedData>(_cacheKey);
+			_response = cache.Get<CachedData>(_lookupKey);
 
 			_metrics = BlendedCacheMetricsStore.GetCacheMetrics().SingleOrDefault(x => _cacheKey.Equals(x.CacheKey, StringComparison.OrdinalIgnoreCase));
 		}
