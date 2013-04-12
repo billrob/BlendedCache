@@ -104,6 +104,24 @@ namespace BasicMvcApplication.Controllers
 			return dataByInt;
 		}
 
+		public ActionResult SampleGetByMulti()
+		{
+			var cache = new BlendedCache.BlendedCache(new HttpContextCache(), new RuntimeMemoryCachingVolatileCache(), NullLongTermCache.NullInstance, new BlendedCacheConfiguration());
+
+			var ids = new List<int>() { 1, 2, 5 };
+
+			//notice being set one at a time.
+			ids.ForEach(x => cache.Set(x, DataBase.GetSampleData(x)));
+			
+			//pulled in one trip.
+			var list = cache.Get<SampleData>(ids);
+
+
+
+
+			return Content(list.Count.ToString());
+		}
+
 		private class SampleComplexKey
 		{
 			public int Id { get; set; }

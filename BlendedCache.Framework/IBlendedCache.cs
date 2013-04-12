@@ -40,5 +40,14 @@ namespace BlendedCache
 		/// <param name="lookupKey">The cacheKey of the item to be stored.</param>
 		/// <param name="cachedItem">The data that should be stored under the lookupKey.</param>
 		void Set<TData, TKey>(TKey lookupKey, TData cachedItem) where TData : class;
+
+		/// <summary>
+		/// Will get a list of items at once from cache.  It will return the same size array passed it, but 
+		/// can contain null entries.  Dictionaries seemed harder to work with, considering the Loading
+		/// capability of blended cache.
+		/// </summary>
+		IList<TData> Get<TData, TKey>(IList<TKey> listToLoad) where TData : class;
+		IList<TData> Get<TData>(IList<int> listToLoad) where TData : class;
+		IList<TData> Get<TData>(IList<string> listToLoad) where TData : class;
 	}
 }

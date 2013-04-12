@@ -70,6 +70,7 @@
     <Compile Include="ICacheKeyConverter.cs" />
     <Compile Include="ICacheTimeout.cs" />
     <Compile Include="CachingLayers\IContextCache.cs" />
+    <Compile Include="KeyedItemLookup.cs" />
     <Compile Include="Logging\LoggerHelper.cs" />
     <Compile Include="Logging\LoggerFactoryBase.cs" />
     <Compile Include="Logging\ILogger.cs" />
