@@ -70,6 +70,46 @@ namespace BasicMvcApplication.Controllers
 			return View(data);
 		}
 
+		public object SampleGetByCacheKey(int id)
+		{
+			var configuration = new BlendedCacheConfiguration();
+			configuration.DefaultCacheKeyConverter = DefaultCacheKeyConverter.MyLookupKeyIsTheCacheKey;
+
+			var cache = new BlendedCache.BlendedCache(new HttpContextCache(), new RuntimeMemoryCachingVolatileCache(), NullLongTermCache.NullInstance, configuration);
+
+			var cacheKey = "SD." + id;
+
+			var dataByInt = cache.Get<SampleData>(cacheKey);
+
+			var dataByString = cache.Get<SampleData>(cacheKey);
+
+			//complex really doesn't transfer, but it would be some string concat.
+			//var dataByComplex = cache.Get<SampleData, SampleComplexKey>(new SampleComplexKey());
+
+			return dataByInt;
+		}
+
+		public object SampleGetByPrimary(int? id)
+		{
+			var cache = new BlendedCache.BlendedCache(new HttpContextCache(), new RuntimeMemoryCachingVolatileCache(), NullLongTermCache.NullInstance, new BlendedCacheConfiguration());
+
+			id = id ?? 42;
+
+			var dataByInt = cache.Get<SampleData>(id.Value);
+
+			var dataByString = cache.Get<SampleData>(id.Value.ToString());
+
+			var dataByComplex = cache.Get<SampleData, SampleComplexKey>(new SampleComplexKey());
+
+			return dataByInt;
+		}
+
+		private class SampleComplexKey
+		{
+			public int Id { get; set; }
+			public Guid Guid { get; set; }
+		}
+
 		private static IBlendedCache GetCache()
 		{
 			var contextCache = new HttpContextCache();
