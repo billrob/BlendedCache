@@ -61,13 +61,13 @@
     <Compile Include="BlendedCacheConfigurationSection.cs" />
     <Compile Include="Configuration\IBlendedCacheConfiguration.cs" />
     <Compile Include="Configuration\ITypeConfiguration.cs" />
-    <Compile Include="DefaultCacheKeyFixupProvider.cs" />
+    <Compile Include="DefaultCacheKeyConverter.cs" />
     <Compile Include="DefaultProviderThings\NullContextCache.cs" />
     <Compile Include="DefaultProviderThings\NullVolatileCache.cs" />
     <Compile Include="DefaultProviderThings\NullWebRequestCacheMetricsUpdater.cs" />
     <Compile Include="IBlendedCache.cs" />
     <Compile Include="ICacheSetter.cs" />
-    <Compile Include="ICacheKeyFixupProvider.cs" />
+    <Compile Include="ICacheKeyConverter.cs" />
     <Compile Include="ICacheTimeout.cs" />
     <Compile Include="CachingLayers\IContextCache.cs" />
     <Compile Include="Logging\LoggerHelper.cs" />

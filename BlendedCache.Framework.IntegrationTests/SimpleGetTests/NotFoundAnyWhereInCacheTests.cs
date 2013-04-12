@@ -10,7 +10,8 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetTests
 	[TestFixture]
 	public class NotFoundAnyWhereInCacheTests
 	{
-		private const string _cacheKey = "myKey";
+		private const int _lookupKey = 33244543;
+		private string _cacheKey = "myKey";
 		private CachedData _response;
 		private Metrics _previousMetrics;
 		private Metrics _metrics;
@@ -18,6 +19,7 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetTests
 		[SetUp]
 		public void SetUp()
 		{
+			_cacheKey = new DefaultCacheKeyConverter().ConvertCacheKey<CachedData, int>("", _lookupKey);
 			_response = null;
 			_previousMetrics = BlendedCacheMetricsStore.GetCacheMetrics().SingleOrDefault(x => _cacheKey.Equals(x.CacheKey, StringComparison.OrdinalIgnoreCase)) ?? new Metrics();
 		}
@@ -90,7 +92,7 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetTests
 		{
 			var cache = TestHelpers.GetCache();
 
-			_response = cache.Get<CachedData>(_cacheKey);
+			_response = cache.Get<CachedData>(_lookupKey);
 
 			_metrics = BlendedCacheMetricsStore.GetCacheMetrics().SingleOrDefault(x => _cacheKey.Equals(x.CacheKey, StringComparison.OrdinalIgnoreCase));
 		}

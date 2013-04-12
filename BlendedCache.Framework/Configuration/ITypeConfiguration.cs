@@ -26,5 +26,10 @@ namespace BlendedCache
 		/// The cache timeout configuration for this type.
 		/// </summary>
 		ICacheTimeout CacheTimeout { get; }
+
+		/// <summary>
+		/// If this type needs to override the default converter for this type's configuration.
+		/// </summary>
+		ICacheKeyConverter DefaultCacheKeyConverter { get; }
 	}
 }

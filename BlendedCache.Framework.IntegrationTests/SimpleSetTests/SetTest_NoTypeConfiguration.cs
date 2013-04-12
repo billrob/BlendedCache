@@ -10,12 +10,14 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleSetTests
 	[TestFixture]
 	public class SetTest_NoTypeConfiguration
 	{
-		private const string _cacheKey = "AreYouTheGatekeeper";
+		private string _cacheKey;
+		private const string _lookupKey = "AreYouTheGateKeeper";
 		private CachedData _cachedItem;
 		private IContextCache _contextCache;
 		private IVolatileCache _volatileCache;
 		private ILongTermCache _longTermCache;
 		private IBlendedCacheConfiguration _configuration;
+		private ICacheKeyConverter _cacheKeyProvider;
 
 		[SetUp]
 		public void SetUp()
@@ -23,6 +25,8 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleSetTests
 			_cachedItem = new CachedData();
 			var existingCachedItem = new CachedData();
 
+			_cacheKeyProvider = new DefaultCacheKeyConverter();
+			_cacheKey = _cacheKeyProvider.ConvertCacheKey<CachedData, string>("", _lookupKey);
 			_contextCache = new DictionaryContextCache(_cacheKey, existingCachedItem);
 			_volatileCache = new DictionaryVolatileCache(_cacheKey, existingCachedItem);
 			_longTermCache = new DictionaryLongTermCache(_cacheKey, existingCachedItem);
@@ -142,7 +146,7 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleSetTests
 		{
 			var blendedCache = TestHelpers.GetCache(_contextCache, _volatileCache, _longTermCache, _configuration);
 
-			blendedCache.Set(_cacheKey, _cachedItem);
+			blendedCache.Set(_lookupKey, _cachedItem);
 		}
 	}
 }

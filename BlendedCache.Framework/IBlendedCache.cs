@@ -26,17 +26,19 @@ namespace BlendedCache
 		/// Will get the specified item based on the cacheKey.
 		/// </summary>
 		/// <typeparam name="TData">The type of data that should be returned.</typeparam>
-		/// <param name="cacheKey">The cacheKey of the item to be retrieved.</param>
+		/// <param name="lookupKey">The lookupKey, eg. cacheKey or primaryKey of the item to be retrieved.</param>
 		/// <returns>The item requests or null.  If TypeConfigurations are registered, the DataLoader will be executed.</returns>
-		TData Get<TData>(string cacheKey) where TData : class;
+		TData Get<TData, TKey>(TKey lookupKey) where TData : class;
+		TData Get<TData>(int lookupKey) where TData : class;
+		TData Get<TData>(string lookupKey) where TData : class;
 
 		/// <summary>
 		/// Will set the cache item using the TypeConfiguration or the default settings.
 		/// </summary>
 		/// <typeparam name="TData">The type of data that should be set.</typeparam>
-		/// <param name="cachedItem">The cacheKey of the item to be stored.</param>
-		/// <param name="data">The data that should be stored under the cacheKey.</param>
-		void Set<TData>(string cacheKey, TData cachedItem) where TData : class;
+		/// <typeparam name="TKey">The type of the lookupKey to retreive this item.</typeparam>
+		/// <param name="lookupKey">The cacheKey of the item to be stored.</param>
+		/// <param name="cachedItem">The data that should be stored under the lookupKey.</param>
+		void Set<TData, TKey>(TKey lookupKey, TData cachedItem) where TData : class;
 	}
-	
 }
