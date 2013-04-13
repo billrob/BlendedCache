@@ -49,7 +49,10 @@
     <Compile Include="DefaultProviderThings\DefaultCacheTimeout.cs" />
     <Compile Include="DefaultProviderThings\DefaultCacheSetter.cs" />
     <Compile Include="CachingLayers\IVolatileCacheEntry.cs" />
-    <Compile Include="DefaultProviderThings\NullLongTermCache.cs" />
+    <Compile Include="Implementation\DictionaryContextCache.cs" />
+    <Compile Include="Implementation\DictionaryLongTermCache.cs" />
+    <Compile Include="Implementation\DictionaryVolatileCache.cs" />
+    <Compile Include="Implementation\NullLongTermCache.cs" />
     <Compile Include="DefaultProviderThings\DefaultLongTermCacheLookup.cs" />
     <Compile Include="DefaultProviderThings\DefaultVolatileCacheLookup.cs" />
     <Compile Include="CachingLayers\IVolatileCacheLookup.cs" />
@@ -62,8 +65,8 @@
     <Compile Include="Configuration\IBlendedCacheConfiguration.cs" />
     <Compile Include="Configuration\ITypeConfiguration.cs" />
     <Compile Include="DefaultCacheKeyConverter.cs" />
-    <Compile Include="DefaultProviderThings\NullContextCache.cs" />
-    <Compile Include="DefaultProviderThings\NullVolatileCache.cs" />
+    <Compile Include="Implementation\NullContextCache.cs" />
+    <Compile Include="Implementation\NullVolatileCache.cs" />
     <Compile Include="DefaultProviderThings\NullWebRequestCacheMetricsUpdater.cs" />
     <Compile Include="IBlendedCache.cs" />
     <Compile Include="ICacheSetter.cs" />

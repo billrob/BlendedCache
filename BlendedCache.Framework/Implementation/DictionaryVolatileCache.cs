@@ -1,43 +1,44 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BlendedCache.Framework.IntegrationTests
+namespace BlendedCache
 {
 	/// <summary>
-	/// test class for the dictionary volatile cache, not to be used in production, ever.
+	/// Provides a dictionary based volatile cache.  This is a in-memory cache scoped to the instance of this variable.
 	/// </summary>
-	internal class DictionaryVolatileCache : IVolatileCache
+	public class DictionaryVolatileCache : IVolatileCache
 	{
-		private Dictionary<string, DefaultVolatileCacheEntry<object>> _collection = new Dictionary<string, DefaultVolatileCacheEntry<object>>();
+		private IDictionary<string, DefaultVolatileCacheEntry<object>> _collection = new ConcurrentDictionary<string, DefaultVolatileCacheEntry<object>>();
 
 		/// <summary>
 		/// Will create an empty dictionary volatile cache.
 		/// </summary>
 		public DictionaryVolatileCache() { }
-		
+
 		/// <summary>
 		/// Will create a dictionary volatile cache with the item populated.
 		/// </summary>
 		/// <param name="cacheKey">The cacheKey to store.</param>
 		/// <param name="cachedItem">The cachedItem to store.</param>
-		public DictionaryVolatileCache(string cacheKey, object cachedItem)
+		internal DictionaryVolatileCache(string cacheKey, object cachedItem)
 		{
 			var item = new DefaultVolatileCacheEntry<object>(cachedItem, 60);
 
 			_collection.Add(cacheKey, item);
 		}
 
-		void IVolatileCache.Set<TData>(string cacheKey, IVolatileCacheEntry<TData> cacheEntry)
+		public void Set<TData>(string cacheKey, IVolatileCacheEntry<TData> cacheEntry) where TData : class
 		{
 			var item = new DefaultVolatileCacheEntry<object>(cacheEntry.CachedItem, cacheEntry.ExpirationDateTimeUtc);
-			lock(_collection)
+			lock (_collection)
 				_collection[cacheKey] = item;
 		}
 
-		IVolatileCacheEntry<TData> IVolatileCache.Get<TData>(string cacheKey)
+		public IVolatileCacheEntry<TData> Get<TData>(string cacheKey) where TData : class
 		{
 			lock (_collection)
 			{
@@ -61,7 +62,7 @@ namespace BlendedCache.Framework.IntegrationTests
 			}
 		}
 
-		void IVolatileCache.Remove(string cacheKey)
+		public void Remove(string cacheKey)
 		{
 			lock (_collection)
 			{

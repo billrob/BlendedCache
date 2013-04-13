@@ -41,7 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ContextCacheProviders\DictionaryContextCache.cs" />
     <Compile Include="ContextCacheProviders\HttpContextCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VolatileCacheProviders\RuntimeMemoryCachingVolatileCache.cs" />

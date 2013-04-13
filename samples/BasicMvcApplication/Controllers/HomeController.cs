@@ -128,10 +128,12 @@ namespace BasicMvcApplication.Controllers
 			public Guid Guid { get; set; }
 		}
 
+		private static ILongTermCache _dictionaryLongTermCache = new DictionaryLongTermCache();
 		private static IBlendedCache GetCache()
 		{
 			var contextCache = new HttpContextCache();
 			var volatileCache = new RuntimeMemoryCachingVolatileCache();
+			var longTermCache = new DictionaryLongTermCache();
 			var configuration = new BlendedCacheConfiguration()
 				{
 					DefaultCacheTimeout = new DefaultCacheTimeout()
@@ -141,7 +143,7 @@ namespace BasicMvcApplication.Controllers
 					}
 				}; // this could be driven by the web.config
 
-			return new BlendedCache.BlendedCache(contextCache, volatileCache, NullLongTermCache.NullInstance, configuration);
+			return new BlendedCache.BlendedCache(contextCache, volatileCache, _dictionaryLongTermCache, configuration);
 		}
 	}
 
