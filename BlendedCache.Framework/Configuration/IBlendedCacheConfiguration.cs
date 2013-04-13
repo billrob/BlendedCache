@@ -27,6 +27,11 @@ namespace BlendedCache
 		ICacheTimeout DefaultCacheTimeout { get; }
 
 		/// <summary>
+		/// The default cacheKey converter, these can be overriden through type configuration.
+		/// </summary>
+		ICacheKeyConverter DefaultCacheKeyConverter { get; }
+
+		/// <summary>
 		/// Determines if a prefix should be applied to all cache keys.
 		/// </summary>
 		string CacheKeyRoot { get; }
@@ -38,5 +43,8 @@ namespace BlendedCache
 		/// <param name="type">The type to look for the timeouts on.</param>
 		/// <returns>Will return the type specific ICacheTimeout or the DefaultCacheTimeout.</returns>
 		ICacheTimeout GetCacheTimeoutForTypeOrDefault(Type type);
+
+		//thinking these two methods don't belong on here.  Maybe some IConfigurationResolver
+		string GetCacheKeyForTypeOrDefault<TData, TKey>(TKey primaryKey); 
 	}
 }

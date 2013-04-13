@@ -10,7 +10,8 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetTests
 	[TestFixture]
 	public class FoundInLongTermCacheTests
 	{
-		private const string _cacheKey = "myKey";
+		private static Guid _lookupKey = Guid.NewGuid();
+		private string _cacheKey;
 		private CachedData _cachedItem;
 		private CachedData _response;
 		private Metrics _previousMetrics;
@@ -25,6 +26,7 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetTests
 			_contextCache = null;
 			_volatileCache = null;
 
+			_cacheKey = new DefaultCacheKeyConverter().ConvertCacheKey<CachedData, Guid>("", _lookupKey);
 			_response = null;
 			_cachedItem = new CachedData();
 			_previousMetrics = BlendedCacheMetricsStore.GetCacheMetrics().SingleOrDefault(x => _cacheKey.Equals(x.CacheKey, StringComparison.OrdinalIgnoreCase)) ?? new Metrics();
@@ -129,7 +131,7 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetTests
 			_contextCache = cache.GetContextCache();
 			_volatileCache = cache.GetVolatileCache();
 
-			_response = cache.Get<CachedData>(_cacheKey);
+			_response = cache.Get<CachedData, Guid>(_lookupKey);
 
 			_metrics = BlendedCacheMetricsStore.GetCacheMetrics().SingleOrDefault(x => _cacheKey.Equals(x.CacheKey, StringComparison.OrdinalIgnoreCase));
 		}

@@ -29,6 +29,7 @@ namespace BlendedCache
 			_configuration = configuration ?? new BlendedCacheConfiguration();
 			_cacheKeyRoot = _configuration.CacheKeyRoot; //optimized because it is looked up so many times.
 
+
 			// create a logger for this class
 			this._logger = Logging.LoggerHelper.GetLogger(this.GetType());
 		}
@@ -60,22 +61,24 @@ namespace BlendedCache
 		/// <typeparam name="TData">The type of data that should be returned.</typeparam>
 		/// <param name="cacheKey">The cacheKey of the item to be retrieved.</param>
 		/// <returns>The item requests or null.  If TypeConfigurations are registered, the DataLoader will be executed.</returns>
-		public TData Get<TData>(string cacheKey) where TData : class
+		public TData Get<TData>(string  lookupKey) where TData : class { return Get<TData, string>(lookupKey);}
+		public TData Get<TData>(int lookupKey) where TData : class { return Get<TData, int >(lookupKey); }
+		public TData Get<TData, TKey>(TKey lookupKey) where TData : class
 		{
-			var fixedUpCacheKey = _cacheKeyFixupProvider.FixUpCacheKey(_cacheKeyRoot, cacheKey);
+			var cacheKey = _cacheKeyConverter.ConvertCacheKey<TData, TKey>(_cacheKeyRoot, lookupKey);
 
 			TData existingItem = null;
 
 			//context cache is the fast one, just return the item.
-			if (TryGetDataFromContextCache(fixedUpCacheKey, out existingItem))
+			if (TryGetDataFromContextCache(cacheKey, out existingItem))
 				return existingItem;
 
-			var cacheMetrics = _cacheMetricsLookup.GetOrCreateCacheItemMetric(fixedUpCacheKey);
+			var cacheMetrics = _cacheMetricsLookup.GetOrCreateCacheItemMetric(cacheKey);
 
 			//flushing no need to look further.
 			if (_flushMode) return null;
 
-			existingItem = _volatileCacheLookup.GetDataFromVolatileCache<TData>(fixedUpCacheKey, cacheMetrics);
+			existingItem = _volatileCacheLookup.GetDataFromVolatileCache<TData>(cacheKey, cacheMetrics);
 
 			//found, so back fill
 			if (existingItem != null)
@@ -87,7 +90,7 @@ namespace BlendedCache
 			}
 
 			//longterm lookup
-			existingItem = _longTermCacheLookup.GetDataFromLongTermCache<TData>(fixedUpCacheKey, cacheMetrics);
+			existingItem = _longTermCacheLookup.GetDataFromLongTermCache<TData>(cacheKey, cacheMetrics);
 
 			if (existingItem != null)
 			{
@@ -104,20 +107,20 @@ namespace BlendedCache
 			return null;
 		}
 
-
 		#region Set Method
-		public void Set<TData>(string cacheKey, TData cachedItem) where TData : class
+		public void Set<TData, TKey>(TKey lookupKey, TData cachedItem) where TData : class
 		{
 			var timeout = _configuration.GetCacheTimeoutForTypeOrDefault(typeof(TData));
+			var cacheKey = _cacheKeyConverter.ConvertCacheKey<TData, TKey>(_cacheKeyRoot, lookupKey);
 
 			//will set across the various layers.
 			_cacheSetter.Set(cacheKey, cachedItem, timeout, SetCacheLocation.LongTermCache, _contextCache, _volatileCache, _longTermCache);
 		}
 		#endregion Set Method
 
-		private ICacheKeyFixupProvider _cacheKeyFixupProvider
+		private ICacheKeyConverter _cacheKeyConverter
 		{
-			get { return TryGetService<ICacheKeyFixupProvider>() ?? new DefaultCacheKeyFixupProvider(); }
+			get { return TryGetService<ICacheKeyConverter>() ?? new DefaultCacheKeyConverter(); }
 		}
 
 		private IContextCacheLookup _contextCacheLookup
@@ -231,5 +234,30 @@ namespace BlendedCache
 		}
 
 		#endregion ioc work around
+
+		public TData Get2<TData, TKey>(TKey lookupKey) where TData : class
+		{
+			return default(TData);
+			////so you see not much complexity of code increase.
+			////taking the primary key is going to be 
+			//var cacheKey = _configuration.GetCacheKeyForTypeOrDefault<TData>(primaryKey);
+
+			//fancy get
+			//var item = Get<TData>(cacheKey);
+
+			//if(item != null)
+			//	return item;
+
+			//var loader = _configuration.GetLoaderForTypeOrDefault<TData, TKey>();
+
+			//if(loader == null)
+			//	return null;
+
+			//item  =loader(dbContext, primaryKey);
+
+			//_cacheSetter.Set(cacheKey, item);
+
+			//return item;
+		}
 	}
 }

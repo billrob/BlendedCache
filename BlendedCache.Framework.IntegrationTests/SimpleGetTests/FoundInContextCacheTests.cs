@@ -10,7 +10,8 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetTests
 	[TestFixture]
 	public class FoundInContextCacheTests
 	{
-		private const string _cacheKey = "myKey";
+		private const string _lookupKey = "marco....pollo...chicken.eh";
+		private string _cacheKey;
 		private CachedData _contextCachedItem = null;
 		private CachedData _response;
 		private IContextCache _contextCache_Full;
@@ -21,6 +22,7 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetTests
 		public void SetUp()
 		{
 			_response = null;
+			_cacheKey = new DefaultCacheKeyConverter().ConvertCacheKey<CachedData, string>("", _lookupKey);
 			_contextCachedItem = new CachedData();
 			_contextCache_Full = new DictionaryContextCache(_cacheKey, _contextCachedItem);
 
@@ -88,7 +90,7 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetTests
 		{
 			var cache = TestHelpers.GetCache(_contextCache_Full);
 
-			_response = cache.Get<CachedData>(_cacheKey);
+			_response = cache.Get<CachedData>(_lookupKey);
 			_metrics = BlendedCacheMetricsStore.GetCacheMetrics().SingleOrDefault(x => _cacheKey.Equals(x.CacheKey, StringComparison.OrdinalIgnoreCase)) ?? new Metrics();
 		}
 	}

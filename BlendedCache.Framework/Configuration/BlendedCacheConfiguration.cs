@@ -20,6 +20,7 @@ namespace BlendedCache
 		{
 			EnforceAllLoadedTypesAreConfigDefined = false;
 			DefaultCacheTimeout = new DefaultCacheTimeout();
+			DefaultCacheKeyConverter = new DefaultCacheKeyConverter();
 		}
 
 		/// <summary>
@@ -69,6 +70,11 @@ namespace BlendedCache
 		public ICacheTimeout DefaultCacheTimeout { get; set; }
 
 		/// <summary>
+		/// The default cacheKey converter, these can be overriden through type configuration.
+		/// </summary>
+		public ICacheKeyConverter DefaultCacheKeyConverter { get; set; }
+
+		/// <summary>
 		/// Will require that all types loaded through the Get method need to have a type loader defined.  Default it false.
 		/// </summary>
 		public bool EnforceAllLoadedTypesAreConfigDefined { get; set; }
@@ -77,11 +83,11 @@ namespace BlendedCache
 		/// Will get the cache configuration for the provided type.  Should return the default cacheTimeout when 
 		/// there is no type registered.
 		/// </summary>
-		/// <param name="type">The type to look for the timeouts on.</param>
+		/// <param name="cachedItemType">The type to look for the timeouts on.</param>
 		/// <returns>Will return the type specific ICacheTimeout or the DefaultCacheTimeout.</returns>
-		public ICacheTimeout GetCacheTimeoutForTypeOrDefault(Type type)
+		public ICacheTimeout GetCacheTimeoutForTypeOrDefault(Type cachedItemType)
 		{
-			var config = GetTypeConfiguration(type);
+			var config = GetTypeConfiguration(cachedItemType);
 
 			if (config == null)
 				return DefaultCacheTimeout;
@@ -91,5 +97,23 @@ namespace BlendedCache
 
 			return config.CacheTimeout;
 		}
+
+		//kept going back and forth on whether this should be TData or like the above method take Type parameter.
+		public string GetCacheKeyForTypeOrDefault<TData, TKey>(TKey lookupKey)
+		{
+			var cachedItemType = typeof(TData);
+			var config = GetTypeConfiguration(cachedItemType);
+
+			if (config == null)
+				return DefaultCacheKeyConverter.ConvertCacheKey<TData, TKey>(CacheKeyRoot, lookupKey);
+
+			if (config.DefaultCacheKeyConverter == null)
+				return DefaultCacheKeyConverter.ConvertCacheKey<TData, TKey>(CacheKeyRoot, lookupKey);
+
+			return config.DefaultCacheKeyConverter.ConvertCacheKey<TData, TKey>(CacheKeyRoot, lookupKey);
+		}
+
+		//also this class seems like it is growing a bit with a lot of code inside it.  Duplication across the ICacheTimeout, DefaultCacheTimeout and on the configuration objects.  
+		//should the if here, go here, then here be somewhere else and it just queries against the IConfiguration object.
 	}
 }

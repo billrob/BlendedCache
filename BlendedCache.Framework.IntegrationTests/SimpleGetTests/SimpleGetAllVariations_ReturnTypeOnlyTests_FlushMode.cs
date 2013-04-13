@@ -14,6 +14,7 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetSetTests
 	[TestFixture]
 	public class SimpleGetAllVariations_ReturnTypeOnlyTests_FlushMode
 	{
+		private string _lookupKey = null; 
 		private string _cacheKey = null;
 		private CachedData _contextCachedItem = null;
 		private CachedData _volatileCachedItem = null;
@@ -29,7 +30,8 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetSetTests
 		[SetUp]
 		public void SetUp()
 		{
-			_cacheKey = "myKey";
+			_lookupKey = "myKey";
+			_cacheKey = new DefaultCacheKeyConverter().ConvertCacheKey<CachedData, string>("", _lookupKey);
 			_response = null;
 			_contextCachedItem = new CachedData();
 			_volatileCachedItem = new CachedData();
@@ -128,7 +130,7 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetSetTests
 		{
 			var cache = TestHelpers.GetCache(contextCache, volatileCache, longTermCache, initialFlushMode: true);
 
-			_response = cache.Get<CachedData>(_cacheKey);
+			_response = cache.Get<CachedData>(_lookupKey);
 		}
 		
 	}
