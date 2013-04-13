@@ -13,5 +13,14 @@ namespace BasicMvcApplication
 
 			return data;
 		}
+
+		/// <summary>
+		/// This simulates getting a list of ids.
+		/// </summary>
+		/// <returns></returns>
+		public static List<SampleData> GetSampleDatas(params int[] ids)
+		{
+			return ids.Select(GetSampleData).ToList();
+		}
 	}
 }

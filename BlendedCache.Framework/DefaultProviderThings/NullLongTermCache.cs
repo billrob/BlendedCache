@@ -19,9 +19,20 @@ namespace BlendedCache
 			return null;
 		}
 		
+		/// <summary>
+		/// Will do nothing.
+		/// </summary>
 		void ILongTermCache.Set<TData>(string cacheKey, ILongTermCacheEntry<TData> cachedItem)
 		{
 			return;
+		}
+
+		/// <summary>
+		/// Will return an empty dictionary.
+		/// </summary>
+		public IDictionary<string, ILongTermCacheEntry<TData>> Get<TData>(IEnumerable<string> cacheKeys) where TData : class
+		{
+			return new Dictionary<string, ILongTermCacheEntry<TData>>();
 		}
 
 		/// <summary>
@@ -38,5 +49,8 @@ namespace BlendedCache
 			}
 		}
 		private static ILongTermCache _nullInstance;
+
+
+		
 	}
 }

@@ -21,6 +21,14 @@ namespace BlendedCache
 		ILongTermCacheEntry<TData> Get<TData>(string cacheKey) where TData : class;
 
 		/// <summary>
+		/// Will get a list of stronly typed objects from long term cache. Return return a null entry, but the key will be there when does not exist.
+		/// </summary>
+		/// <typeparam name="TData"></typeparam>
+		/// <param name="cacheKeys"></param>
+		/// <returns></returns>
+		IDictionary<string, ILongTermCacheEntry<TData>> Get<TData>(IEnumerable<string> cacheKeys) where TData : class;
+
+		/// <summary>
 		/// Will set the cachedItem under the cacheKey using the specified refresh rules.
 		/// </summary>
 		/// <typeparam name="TData">The type of the object. Normally infered from datatype.</typeparam>

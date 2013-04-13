@@ -29,20 +29,51 @@ namespace BlendedCache
 		public TData GetDataFromVolatileCache<TData>(string fixedUpCacheKey, CacheItemMetrics cacheMetrics) where TData : class
 		{
 			//get it from volatile.
-			var item = _volatileCache.Get<TData>(fixedUpCacheKey);
+			var cacheEntry = _volatileCache.Get<TData>(fixedUpCacheKey);
 
-			cacheMetrics.OnItemVolatileCacheLookedUp(item, _metricsUpdater);
+			cacheMetrics.OnItemVolatileCacheLookedUp(cacheEntry, _metricsUpdater);
 
+			return ExtractValidCachedItem<TData>(cacheEntry);
+		}
+
+		/// <summary>
+		/// Will get a list of cacheKeys from the volatile cache store.  And will return the list of items it found.
+		/// </summary>
+		public KeyedItemLookupList<TKey,TData> SetDataFromVolatileCache<TData, TKey>(KeyedItemLookupHashSet<TKey, TData> itemsToLookup, SortedList<TKey, TData> foundItems) where TData : class
+		{
+			var newlyFoundItems = new KeyedItemLookupList<TKey, TData>();
+
+			foreach (var itemToLookup in itemsToLookup.GetRemainingList())
+			{
+				var cacheEntry = _volatileCache.Get<TData>(itemToLookup.CacheKey);
+				itemToLookup.Metrics.OnItemVolatileCacheLookedUp(cacheEntry, _metricsUpdater);
+
+				var cachedItem = ExtractValidCachedItem<TData>(cacheEntry);
+
+				//expired or something
+				if (cachedItem == null)
+					continue;
+			
+				foundItems.Add(itemToLookup.LookupKey, cachedItem);
+				itemToLookup.CachedItem = cachedItem;
+				newlyFoundItems.Add(itemToLookup);
+			}
+
+			return newlyFoundItems;
+		}
+
+		private static TData ExtractValidCachedItem<TData>(IVolatileCacheEntry<TData> cacheEntry) where TData : class
+		{
 			//bail out if null
-			if (item == null)
+			if (cacheEntry == null)
 				return null;
 
 			//this is where blended cache enforces its own definition
 			var now = DateTime.UtcNow;
-			if (now >= item.ExpirationDateTimeUtc)
+			if (now >= cacheEntry.ExpirationDateTimeUtc)
 				return null;
 
-			return item.CachedItem;
+			return cacheEntry.CachedItem;
 		}
 	}
 }

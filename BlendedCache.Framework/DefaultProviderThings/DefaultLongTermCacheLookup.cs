@@ -29,22 +29,61 @@ namespace BlendedCache
 		public TData GetDataFromLongTermCache<TData>(string fixedUpCacheKey, CacheItemMetrics cacheMetrics) where TData : class
 		{
 			//get it from http LongTerm.
-			var item = _longTermCache.Get<TData>(fixedUpCacheKey);
+			var cacheEntry = _longTermCache.Get<TData>(fixedUpCacheKey);
 
-			cacheMetrics.OnItemLongTermCacheLookedUp(item, _metricsUpdater);
+			cacheMetrics.OnItemLongTermCacheLookedUp(cacheEntry, _metricsUpdater);
 
-			if (item == null)
+			return ExtractValidCachedItem<TData>(cacheEntry);
+		}
+
+		/// <summary>
+		/// Will set the long term items found in the collection and return the list that was found.
+		/// </summary>
+		public KeyedItemLookupList<TKey, TData> SetDataFromLongTermCache<TData, TKey>(KeyedItemLookupHashSet<TKey, TData> itemsToLookup, SortedList<TKey, TData> foundItems) where TData : class
+		{
+			var newlyFoundItems = new KeyedItemLookupList<TKey, TData>();
+
+			var remainingItems = itemsToLookup.GetRemainingList();
+
+			var foundCachedItems = _longTermCache.Get<TData>(remainingItems.Select(x => x.CacheKey));
+
+			foreach (var itemToLookup in remainingItems)
+			{
+				var cacheEntry = (ILongTermCacheEntry<TData>)null;
+
+				//not found.
+				foundCachedItems.TryGetValue(itemToLookup.CacheKey, out cacheEntry);
+				itemToLookup.Metrics.OnItemLongTermCacheLookedUp(cacheEntry, _metricsUpdater);
+
+				var cachedItem = ExtractValidCachedItem<TData>(cacheEntry);
+
+				//expired or something
+				if (cachedItem == null)
+					continue;
+
+				foundItems.Add(itemToLookup.LookupKey, cachedItem);
+				itemToLookup.CachedItem = cachedItem;
+				newlyFoundItems.Add(itemToLookup);
+			}
+
+			return newlyFoundItems;
+		}
+
+		private static TData ExtractValidCachedItem<TData>(ILongTermCacheEntry<TData> cacheEntry) where TData : class
+		{
+			//no entry found
+			if (cacheEntry == null)
 				return null;
-			
+
 			var now = DateTime.UtcNow;
-			if (now >= item.ExpirationDateTimeUtc)
+			if (now >= cacheEntry.ExpirationDateTimeUtc)
 				//todo: unless database is down.
 				return null;
 
-			if (now >= item.RefreshDateTimeUtc)
+			if (now >= cacheEntry.RefreshDateTimeUtc)
 				;//todo: queue off refresh expiration execution
 
-			return item.CachedItem;
+			return cacheEntry.CachedItem;
 		}
 	}
 }

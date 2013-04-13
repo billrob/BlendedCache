@@ -74,6 +74,7 @@ namespace BlendedCache
 				return existingItem;
 
 			var cacheMetrics = _cacheMetricsLookup.GetOrCreateCacheItemMetric(cacheKey);
+			var timeout = _configuration.GetCacheTimeoutForTypeOrDefault(typeof(TData));
 
 			//flushing no need to look further.
 			if (_flushMode) return null;
@@ -83,7 +84,6 @@ namespace BlendedCache
 			//found, so back fill
 			if (existingItem != null)
 			{
-				var timeout = _configuration.GetCacheTimeoutForTypeOrDefault(typeof(TData));
 				_cacheSetter.Set(cacheKey, existingItem, timeout, SetCacheLocation.ContextCache, _contextCache, _volatileCache, _longTermCache);
 				
 				return existingItem;
@@ -94,7 +94,6 @@ namespace BlendedCache
 
 			if (existingItem != null)
 			{
-				var timeout = _configuration.GetCacheTimeoutForTypeOrDefault(typeof(TData));
 				_cacheSetter.Set(cacheKey, existingItem, timeout, SetCacheLocation.VolatileCache, _contextCache, _volatileCache, _longTermCache);
 
 				return existingItem;
@@ -105,6 +104,58 @@ namespace BlendedCache
 
 			//found nothing.
 			return null;
+		}
+
+		public IList<TData> Get<TData>(IList<string> listToLoad) where TData : class
+		{
+			return Get<TData, string>(listToLoad);
+		}
+		public IList<TData> Get<TData>(IList<int> listToLoad) where TData : class
+		{
+			return Get<TData, int>(listToLoad);
+		}
+		public IList<TData> Get<TData, TKey>(IList<TKey> listToLoad) where TData : class
+		{
+			var itemsToLookup = new KeyedItemLookupHashSet<TKey, TData>();
+			var foundItems = new SortedList<TKey, TData>();
+			var timeout = _configuration.GetCacheTimeoutForTypeOrDefault(typeof(TData));
+
+			// create all the lookup keys and get the metrics items
+			foreach (var key in listToLoad)
+			{
+				var cacheKey = _cacheKeyConverter.ConvertCacheKey<TData, TKey>(_cacheKeyRoot, key);
+				itemsToLookup.Add(new KeyedItemLookup<TKey, TData>
+				{
+					CacheKey = cacheKey,
+					LookupKey = key,
+					Metrics = _cacheMetricsLookup.GetOrCreateCacheItemMetric(cacheKey),
+				});
+			}
+
+			//grab what we can from the http context
+			_contextCacheLookup.SetDataFromContextCache(itemsToLookup, foundItems);
+
+			if (!_flushMode)
+			{
+				var volatileFound = _volatileCacheLookup.SetDataFromVolatileCache(itemsToLookup, foundItems);
+				volatileFound.ForEach(x => _cacheSetter.Set(x.CacheKey, x.CachedItem, timeout, SetCacheLocation.ContextCache, _contextCache, _volatileCache, _longTermCache));
+
+				var longTermFound = _longTermCacheLookup.SetDataFromLongTermCache(itemsToLookup, foundItems);
+				longTermFound.ForEach(x => _cacheSetter.Set(x.CacheKey, x.CachedItem, timeout, SetCacheLocation.VolatileCache, _contextCache, _volatileCache, _longTermCache));
+			}
+
+			//todo: find everything that's null and reload
+
+			//now build back the list to return in the correct order.
+			var returningList = new List<TData>();
+			foreach (var key in listToLoad)
+			{
+				var returningItem = (TData)null;
+				foundItems.TryGetValue(key, out returningItem);
+				returningList.Add(returningItem);
+			}
+
+			return returningList;
 		}
 
 		#region Set Method
@@ -259,5 +310,6 @@ namespace BlendedCache
 
 			//return item;
 		}
+	
 	}
 }

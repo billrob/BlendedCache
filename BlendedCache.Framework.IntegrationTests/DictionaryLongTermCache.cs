@@ -13,11 +13,11 @@ namespace BlendedCache.Framework.IntegrationTests
 	{
 		private Dictionary<string, DefaultLongTermCacheEntry<object>> _collection = new Dictionary<string, DefaultLongTermCacheEntry<object>>();
 
-				/// <summary>
+		/// <summary>
 		/// Will create an empty dictionary long term cache.
 		/// </summary>
 		public DictionaryLongTermCache() { }
-		
+
 		/// <summary>
 		/// Will create a dictionary long term cache with the item populated.
 		/// </summary>
@@ -37,9 +37,9 @@ namespace BlendedCache.Framework.IntegrationTests
 			{
 				if (!_collection.ContainsKey(cacheKey))
 					return null;
-				
+
 				var cacheEntry = _collection[cacheKey];
-				
+
 				//the higher layers do this already
 				if (DateTime.UtcNow > cacheEntry.ExpirationDateTimeUtc)
 				{
@@ -48,7 +48,7 @@ namespace BlendedCache.Framework.IntegrationTests
 				}
 
 				var cachedItem = cacheEntry.CachedItem as TData;
-				if(cachedItem == null)
+				if (cachedItem == null)
 					return null;
 
 				return new DefaultLongTermCacheEntry<TData>(cachedItem, cacheEntry.ExpirationDateTimeUtc, cacheEntry.RefreshDateTimeUtc);
@@ -61,6 +61,21 @@ namespace BlendedCache.Framework.IntegrationTests
 
 			lock (_collection)
 				_collection[cacheKey] = item;
+		}
+
+
+		IDictionary<string, ILongTermCacheEntry<TData>> ILongTermCache.Get<TData>(IEnumerable<string> cacheKeys)
+		{
+			var dictionary = new Dictionary<string, ILongTermCacheEntry<TData>>();
+
+			foreach (var cacheKey in cacheKeys)
+			{
+				var cachedEntry = ((ILongTermCache)this).Get<TData>(cacheKey);
+				if (cachedEntry != null)
+					dictionary.Add(cacheKey, cachedEntry);
+			}
+
+			return dictionary;
 		}
 	}
 }
