@@ -15,7 +15,7 @@ namespace BlendedCache
 	{
 		public TKey LookupKey;
 		public string CacheKey;
-		public CacheItemMetrics Metrics;
+		public CachedItemMetrics Metrics;
 		public TData CachedItem;
 
 		private bool Equals(KeyedItemLookup<TKey, TData> other)

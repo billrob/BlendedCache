@@ -29,9 +29,7 @@ namespace BlendedCache
 		/// <param name="cachedItem">The cachedItem to store.</param>
 		internal DictionaryContextCache(string cacheKey, object cachedItem)
 		{
-			var item = new DefaultVolatileCacheEntry<object>(cachedItem, 60);
-
-			_items.Add(cacheKey, item);
+			_items.Add(cacheKey, cachedItem);
 		}
 
 		//todo:0 pull over final docs.

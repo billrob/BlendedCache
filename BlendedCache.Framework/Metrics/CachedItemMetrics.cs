@@ -11,14 +11,20 @@ namespace BlendedCache
 	/// of threading concerns.  If this class is needed for another layer, copy the fields onto another object.
 	/// Such as the Metrics object.
 	/// </summary>
-	internal class CacheItemMetrics
+	internal class CachedItemMetrics
 	{
-		internal CacheItemMetrics(string cacheKey)
+		internal CachedItemMetrics(string cacheKey, object lookupKey)
 		{
 			this.CacheKey = cacheKey;
+			this.LookupKey = lookupKey;
 			_dateCreated = DateTime.UtcNow.Ticks;
 			this.LoadingLock = new object();
 		}
+
+		/// <summary>
+		/// The lookup key stored with the item.
+		/// </summary>
+		internal object LookupKey { get; private set; }
 
 		/// <summary>
 		/// The cache key for the item.
@@ -220,6 +226,7 @@ namespace BlendedCache
 			return new Metrics()
 			{
 				CacheKey = this.CacheKey,
+				LookupKey = this.LookupKey,
 				DateCreated = new DateTime(this._dateCreated),
 				FirstLoaded = new DateTime(this._firstLoaded),
 				LastLoaded = new DateTime(this._lastLoaded),

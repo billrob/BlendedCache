@@ -12,7 +12,7 @@ namespace BlendedCache.Tests.MetricsTests
 		/// <summary>
 		/// Will set the value on the private field of the metrics object.
 		/// </summary>
-		internal static void SetValue(this CacheItemMetrics metrics, string fieldName, long value)
+		internal static void SetValue(this CachedItemMetrics metrics, string fieldName, long value)
 		{
 			var fieldInfo = metrics.GetType().GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
 			if (fieldInfo == null)
@@ -24,7 +24,7 @@ namespace BlendedCache.Tests.MetricsTests
 		/// <summary>
 		/// Will get the value from the private field of the metrics object.
 		/// </summary>
-		internal static long GetValue(this CacheItemMetrics metrics, string fieldName)
+		internal static long GetValue(this CachedItemMetrics metrics, string fieldName)
 		{
 			var fieldInfo = metrics.GetType().GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance);
 			if (fieldInfo == null)

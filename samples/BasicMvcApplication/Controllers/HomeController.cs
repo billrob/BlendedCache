@@ -18,7 +18,7 @@ namespace BasicMvcApplication.Controllers
 			var cache = GetCache();
 			var sb = new StringBuilder();
 
-			var firstMetric = BlendedCacheMetricsStore.GetCacheMetrics(cacheKey) ?? new Metrics();
+			var firstMetric = BlendedCacheMetricsStore.GetCachedItemMetrics<SampleData,string>(cacheKey) ?? new Metrics();
 
 			var data = (SampleData)null;
 			if (cache.Get<SampleData>(cacheKey) == null)
@@ -32,13 +32,13 @@ namespace BasicMvcApplication.Controllers
 				sb.Append("<p>The data did exist.</p>");
 			}
 
-			var secondMetric = BlendedCacheMetricsStore.GetCacheMetrics(cacheKey);
+			var secondMetric = BlendedCacheMetricsStore.GetCachedItemMetrics<SampleData, string>(cacheKey);
 
 			data = cache.Get<SampleData>(cacheKey);
 			sb.Append("<p>Date Created: " + data.DateCreated.ToString() + "</p>");
 
 			cache.Get<SampleData>(cacheKey);
-			var thirdMetric = BlendedCacheMetricsStore.GetCacheMetrics(cacheKey);
+			var thirdMetric = BlendedCacheMetricsStore.GetCachedItemMetrics<SampleData, string>(cacheKey);
 
 			sb.Append("<p>Refresh the page to see it in action and when it expires.</p>");
 
@@ -178,7 +178,7 @@ namespace BasicMvcApplication.Controllers
 			{
 
 				sb.Append("<tr>");
-				sb.AppendFormat("<td>{0}</td>", metric.CacheKey);
+				sb.AppendFormat("<td>{0}</td>", metric.LookupKey);
 				sb.AppendFormat("<td>{0}</td>", metric.VolatileCacheHits);
 				sb.AppendFormat("<td>{0}</td>", metric.VolatileCacheLookUps);
 				sb.AppendFormat("<td>{0}</td>", metric.VolatileCacheMisses);

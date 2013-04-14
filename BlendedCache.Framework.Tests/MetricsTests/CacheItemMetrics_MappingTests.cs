@@ -12,12 +12,12 @@ namespace BlendedCache.Tests.MetricsTests
 	public class CacheItemMetrics_MappingTests
 	{
 		private Metrics _public;
-		private CacheItemMetrics _private;
+		private CachedItemMetrics _private;
 
 		[SetUp]
 		public void SetUp()
 		{
-			_private = new CacheItemMetrics("mycustomkey");
+			_private = new CachedItemMetrics("mycustomkey", new object());
 		}
 
 		[Test]
@@ -27,6 +27,15 @@ namespace BlendedCache.Tests.MetricsTests
 			Assert.NotNull(_private.CacheKey);
 			Assert.AreEqual(_private.CacheKey, _public.CacheKey);
 		}
+
+		[Test]
+		public void when_mapping_from_CacheItemMetrics_to_public_Metrics_should_map_LookupKey()
+		{
+			Execute();
+			Assert.NotNull(_private.LookupKey);
+			Assert.AreEqual(_private.LookupKey, _public.LookupKey);
+		}
+
 		[Test]
 		public void when_mapping_from_CacheItemMetrics_to_public_Metrics_should_map_LongTermCacheHits()
 		{

@@ -83,10 +83,10 @@
     <Compile Include="Logging\NullLogger.cs" />
     <Compile Include="Logging\NullLoggerFactory.cs" />
     <Compile Include="Metrics\BlendedCacheMetricsStore.cs" />
-    <Compile Include="Metrics\CacheItemMetrics.cs" />
+    <Compile Include="Metrics\CachedItemMetrics.cs" />
     <Compile Include="DefaultProviderThings\DefaultCacheMetricsLookup.cs" />
-    <Compile Include="Metrics\ICacheMetricsContainer.cs" />
-    <Compile Include="Metrics\ICacheMetricsLookup.cs" />
+    <Compile Include="Metrics\ICachedItemMetricsContainer.cs" />
+    <Compile Include="Metrics\ICachedItemMetricsLookup.cs" />
     <Compile Include="Metrics\IWebRequestCachingUpdater.cs" />
     <Compile Include="Metrics\Metrics.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
