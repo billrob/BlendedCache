@@ -18,7 +18,7 @@ namespace BlendedCache
 		/// <param name="fixedUpCacheKey">The cacheKey after it has been run through fix up.</param>
 		/// <param name="cacheMetrics">The cache metrics item for the given key.</param>
 		/// <returns>The existing item if it exists.</returns>
-		TData GetDataFromVolatileCache<TData>(string fixedUpCacheKey, CacheItemMetrics cacheMetrics) where TData : class;
+		TData GetDataFromVolatileCache<TData>(string fixedUpCacheKey, CachedItemMetrics cacheMetrics) where TData : class;
 
 		/// <summary>
 		/// Will get a list of cacheKeys from the volatile cache store.  And will return the list of items it found.

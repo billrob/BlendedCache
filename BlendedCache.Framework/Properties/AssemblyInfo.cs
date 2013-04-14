@@ -35,7 +35,6 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]
 [assembly: InternalsVisibleTo("BlendedCache.Framework.Tests")]
+[assembly: InternalsVisibleTo("BlendedCache.Framework.IntegrationTests")]
 [assembly: InternalsVisibleTo("BlendedCache.Providers")]
 [assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
-// try to never set internals visible to "BlendedCache.Framework.IntegrationTests" to help enforce the integrative aspects.
-/*****/

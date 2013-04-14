@@ -12,7 +12,7 @@ namespace BlendedCache.Tests.MetricsTests
 	[TestFixture]
 	public class CacheItemMetrics_OnItemVolatileCacheLookedUpTests
 	{
-		private CacheItemMetrics _metrics;
+		private CachedItemMetrics _metrics;
 		private object _itemLookedUp;
 		private IWebRequestCacheMetricsUpdater _updaterMock;
 
@@ -20,7 +20,7 @@ namespace BlendedCache.Tests.MetricsTests
 		public void SetUp()
 		{
 			_itemLookedUp = null;
-			_metrics = new CacheItemMetrics("");
+			_metrics = new CachedItemMetrics("", new object());
 
 			_updaterMock = RMM.GenerateStrictMock<IWebRequestCacheMetricsUpdater>();
 			RME.Stub(_updaterMock, x => x.Increment_Cache_VolatileLookup());

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace BlendedCache
 {
 	/// <summary>
-	/// Class for working with the various blended cache metrics under watch.  They are sorted by the DataLoader underlying them.
+	/// Class for working with the various blended cache metrics under watch.
 	/// </summary>
 	public static class BlendedCacheMetricsStore
 	{
@@ -17,28 +17,36 @@ namespace BlendedCache
 		/// </summary>
 		public static List<Metrics> GetCacheMetrics()
 		{
-			//todo:3 might need some loving to make this work better with injection.
-			var store = new DefaultCacheMetricsLookup() as ICacheMetricsContainer;
-
-			if (store == null)
-				throw new NotImplementedException("There is no cache metrics, maybe this should be returning null or empty list instead.");
-
-			return store.GetCacheMetrics();
+			return _cachedItemMetricsContainer.GetCacheMetrics();
 		}
 
 		/// <summary>
-		/// Will get the specific cache metrics object via the cache key.  Can return null if there are no metrics.
+		/// Will get the specific cache metrics object via the lookup key.  Can return null if there are no metrics.
 		/// </summary>
-		/// <param name="cacheKey">The cache key to get metrics for. </param>
+		/// <param name="lookupKey">The lookup key to get metrics for. </param>
 		/// <returns></returns>
-		public static Metrics GetCacheMetrics(string cacheKey)
+		public static Metrics GetCachedItemMetrics<TData, TKey>(TKey lookupKey) where TData : class
 		{
-			var store = new DefaultCacheMetricsLookup() as ICacheMetricsContainer;
+			//todo:0 get the cacheKey root in here somehow.
+			var cacheKeyRoot = "";
+			var cacheKey = _cacheKeyConverter.ConvertCacheKey<TData, TKey>(cacheKeyRoot, lookupKey);
+			return _cachedItemMetricsContainer.GetCachedItemMetrics(cacheKey);
+		}
 
-			if (store == null)
-				throw new NotImplementedException("There is no cache metrics, maybe this should be returning null or empty list instead.");
+		private static ICachedItemMetricsContainer _cachedItemMetricsContainer
+		{
+			get { return TryGetService<ICachedItemMetricsContainer>() ?? new DefaultCacheMetricsLookup(); }
+		}
 
-			return store.GetCacheMetrics(cacheKey);
+		private static ICacheKeyConverter _cacheKeyConverter
+		{
+			get { return TryGetService<ICacheKeyConverter>() ?? new DefaultCacheKeyConverter(); }
+		}
+
+		private static T TryGetService<T>() where T : class
+		{
+			//todo:3 might need some loving to make this work better with injection.
+			return null;
 		}
 	}
 }

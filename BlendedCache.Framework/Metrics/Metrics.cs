@@ -12,6 +12,11 @@ namespace BlendedCache
 	public class Metrics
 	{
 		/// <summary>
+		/// The lookup key for the item.
+		/// </summary>
+		public object LookupKey { get; internal set; }
+
+		/// <summary>
 		/// The cache key for the item.
 		/// </summary>
 		public string CacheKey { get; internal set; }

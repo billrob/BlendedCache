@@ -52,8 +52,6 @@
     <Compile Include="BlendedCacheExtensions.cs" />
     <Compile Include="CachedData.cs" />
     <Compile Include="DictionaryLongTermCache.cs" />
-    <Compile Include="DictionaryVolatileCache.cs" />
-    <Compile Include="DictionaryContextCache.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimpleGetTests\FoundInLongTermCacheTests.cs" />
     <Compile Include="SimpleGetTests\FoundInVolatileCacheTests.cs" />

@@ -26,7 +26,7 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetTests
 			_contextCachedItem = new CachedData();
 			_contextCache_Full = new DictionaryContextCache(_cacheKey, _contextCachedItem);
 
-			_previousMetrics = BlendedCacheMetricsStore.GetCacheMetrics().SingleOrDefault(x => _cacheKey.Equals(x.CacheKey, StringComparison.OrdinalIgnoreCase)) ?? new Metrics();
+			_previousMetrics = BlendedCacheMetricsStore.GetCachedItemMetrics<CachedData, string>(_lookupKey) ?? new Metrics();
 		}
 
 		[Test]
@@ -91,7 +91,7 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetTests
 			var cache = TestHelpers.GetCache(_contextCache_Full);
 
 			_response = cache.Get<CachedData>(_lookupKey);
-			_metrics = BlendedCacheMetricsStore.GetCacheMetrics().SingleOrDefault(x => _cacheKey.Equals(x.CacheKey, StringComparison.OrdinalIgnoreCase)) ?? new Metrics();
+			_metrics = BlendedCacheMetricsStore.GetCachedItemMetrics<CachedData, string>(_lookupKey) ?? new Metrics();
 		}
 	}
 }

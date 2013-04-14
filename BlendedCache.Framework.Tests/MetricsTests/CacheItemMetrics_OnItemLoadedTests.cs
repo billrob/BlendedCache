@@ -10,7 +10,7 @@ namespace BlendedCache.Tests.MetricsTests
 	[TestFixture]
 	public class CacheItemMetrics_OnItemLoadedTests
 	{
-		private CacheItemMetrics _metrics;
+		private CachedItemMetrics _metrics;
 		private long _ticksStart;
 		private long _ticksEnd;
 		private bool _flushed;
@@ -21,7 +21,7 @@ namespace BlendedCache.Tests.MetricsTests
 			_flushed = false;
 			_ticksStart = 3234234;
 			_ticksEnd = _ticksStart + 10000;
-			_metrics = new CacheItemMetrics("");
+			_metrics = new CachedItemMetrics("", new object());
 		}
 
 		[Test]

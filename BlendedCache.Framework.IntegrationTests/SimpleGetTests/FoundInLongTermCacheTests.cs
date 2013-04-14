@@ -29,7 +29,7 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetTests
 			_cacheKey = new DefaultCacheKeyConverter().ConvertCacheKey<CachedData, Guid>("", _lookupKey);
 			_response = null;
 			_cachedItem = new CachedData();
-			_previousMetrics = BlendedCacheMetricsStore.GetCacheMetrics().SingleOrDefault(x => _cacheKey.Equals(x.CacheKey, StringComparison.OrdinalIgnoreCase)) ?? new Metrics();
+			_previousMetrics = BlendedCacheMetricsStore.GetCachedItemMetrics<CachedData, Guid>(_lookupKey) ?? new Metrics();
 		}
 
 		[Test]
@@ -133,7 +133,7 @@ namespace BlendedCache.Framework.IntegrationTests.SimpleGetTests
 
 			_response = cache.Get<CachedData, Guid>(_lookupKey);
 
-			_metrics = BlendedCacheMetricsStore.GetCacheMetrics().SingleOrDefault(x => _cacheKey.Equals(x.CacheKey, StringComparison.OrdinalIgnoreCase));
+			_metrics = BlendedCacheMetricsStore.GetCachedItemMetrics<CachedData, Guid>(_lookupKey) ?? new Metrics();
 		}
 	}
 }

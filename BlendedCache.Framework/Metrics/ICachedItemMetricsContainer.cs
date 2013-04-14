@@ -9,7 +9,7 @@ namespace BlendedCache
 	/// <summary>
 	/// Interface marking an object that contains cache metrics.
 	/// </summary>
-	internal interface ICacheMetricsContainer
+	internal interface ICachedItemMetricsContainer // change to lookupKey if this goes public.
 	{
 		/// <summary>
 		/// Will get all the cache metrics stored in the container in no particular order.  Not very performant.
@@ -18,10 +18,10 @@ namespace BlendedCache
 		List<Metrics> GetCacheMetrics();
 
 		/// <summary>
-		/// Will get a specific cachekey metric.  Very performant compared to get all cache metrics.
+		/// Will get a specific cachedItem metric by cacheKey.  Very performant compared to get all cache metrics.  Can return null.
 		/// </summary>
 		/// <param name="cacheKey">The cacheKey to get the metrics for.</param>
 		/// <returns></returns>
-		Metrics GetCacheMetrics(string cacheKey);
+		Metrics GetCachedItemMetrics(string cacheKey); //this doesn't use lookupKey because I was worried about the equality/GetHashCode implementations.
 	}
 }

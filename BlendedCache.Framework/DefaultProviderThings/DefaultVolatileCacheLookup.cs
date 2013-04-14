@@ -26,7 +26,7 @@ namespace BlendedCache
 		/// <typeparam name="TData"></typeparam>
 		/// <param name="fixedUpCacheKey">The cacheKey after it has been run through fix up.</param>
 		/// <returns></returns>
-		public TData GetDataFromVolatileCache<TData>(string fixedUpCacheKey, CacheItemMetrics cacheMetrics) where TData : class
+		public TData GetDataFromVolatileCache<TData>(string fixedUpCacheKey, CachedItemMetrics cacheMetrics) where TData : class
 		{
 			//get it from volatile.
 			var cacheEntry = _volatileCache.Get<TData>(fixedUpCacheKey);

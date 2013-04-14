@@ -73,7 +73,7 @@ namespace BlendedCache
 			if (TryGetDataFromContextCache(cacheKey, out existingItem))
 				return existingItem;
 
-			var cacheMetrics = _cacheMetricsLookup.GetOrCreateCacheItemMetric(cacheKey);
+			var cacheMetrics = _cacheMetricsLookup.GetOrCreateCacheItemMetric<TData, TKey>(cacheKey, lookupKey);
 			var timeout = _configuration.GetCacheTimeoutForTypeOrDefault(typeof(TData));
 
 			//flushing no need to look further.
@@ -121,14 +121,14 @@ namespace BlendedCache
 			var timeout = _configuration.GetCacheTimeoutForTypeOrDefault(typeof(TData));
 
 			// create all the lookup keys and get the metrics items
-			foreach (var key in listToLoad)
+			foreach (var lookupKey in listToLoad)
 			{
-				var cacheKey = _cacheKeyConverter.ConvertCacheKey<TData, TKey>(_cacheKeyRoot, key);
+				var cacheKey = _cacheKeyConverter.ConvertCacheKey<TData, TKey>(_cacheKeyRoot, lookupKey);
 				itemsToLookup.Add(new KeyedItemLookup<TKey, TData>
 				{
 					CacheKey = cacheKey,
-					LookupKey = key,
-					Metrics = _cacheMetricsLookup.GetOrCreateCacheItemMetric(cacheKey),
+					LookupKey = lookupKey,
+					Metrics = _cacheMetricsLookup.GetOrCreateCacheItemMetric<TData, TKey>(cacheKey, lookupKey),
 				});
 			}
 
@@ -189,9 +189,9 @@ namespace BlendedCache
 			get { return TryGetService<ILongTermCacheLookup>() ?? new DefaultLongTermCacheLookup(_longTermCache, _metricsUpdater); }
 		}
 
-		private ICacheMetricsLookup _cacheMetricsLookup
+		private ICachedItemMetricsLookup _cacheMetricsLookup
 		{
-			get { return TryGetService<ICacheMetricsLookup>() ?? new DefaultCacheMetricsLookup(); }
+			get { return TryGetService<ICachedItemMetricsLookup>() ?? new DefaultCacheMetricsLookup(); }
 		}
 
 		private IWebRequestCacheMetricsUpdater _metricsUpdater
